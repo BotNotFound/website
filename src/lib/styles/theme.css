@@ -1,5 +1,5 @@
 :root {
-	--surface: #000000;
+	--surface: #252626;
 	--sc-low: #0a0a0a;
 	--sc: #0e0e0e;
 	--sc-high: #151515;
@@ -43,7 +43,6 @@
 html,
 body {
 	margin: 0;
-	background: var(--surface);
 	color: var(--on-surface);
 }
 

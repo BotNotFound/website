@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '$lib/styles/theme.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import EmojiBackground from '$lib/components/EmojiBackground.svelte';
 	import SiteHeader from '$lib/components/SiteHeader.svelte';
 	import MottoBanner from '$lib/components/MottoBanner.svelte';
 	import SiteFooter from '$lib/components/SiteFooter.svelte';
@@ -21,6 +22,8 @@
 	/>
 </svelte:head>
 
+<EmojiBackground />
+
 <div data-team={team.key} class="app-shell">
 	<SiteHeader />
 
@@ -32,8 +35,8 @@
 
 <style>
 	.app-shell {
+		position: relative;
 		min-height: 100vh;
-		background: var(--surface);
 		color: var(--on-surface);
 		overflow-x: hidden;
 	}

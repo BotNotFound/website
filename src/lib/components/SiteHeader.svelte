@@ -118,7 +118,7 @@
 		position: sticky;
 		top: 0;
 		z-index: 30;
-		background: var(--surface);
+		background: #000000;
 		border-bottom: 1px solid var(--outline);
 	}
 
