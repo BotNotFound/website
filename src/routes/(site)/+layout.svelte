@@ -19,6 +19,6 @@
 		min-height: 100vh;
 		background: var(--surface);
 		color: var(--on-surface);
-		overflow-x: hidden;
+		overflow-x: clip;
 	}
 </style>

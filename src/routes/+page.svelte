@@ -1,5 +1,5 @@
 <script lang="ts">
-	import HeroNavbar from '$lib/components/hero/HeroNavbar.svelte';
+	import SiteHeader from '$lib/components/SiteHeader.svelte';
 	import HeroMedia from '$lib/components/hero/HeroMedia.svelte';
 	import HeroFooter from '$lib/components/hero/HeroFooter.svelte';
 	import { team } from '$lib/data/teams';
@@ -10,7 +10,7 @@
 </svelte:head>
 
 <div class="hero-page">
-	<HeroNavbar />
+	<SiteHeader />
 	<HeroMedia />
 	<HeroFooter />
 </div>
@@ -24,7 +24,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		overflow: hidden;
+		overflow: clip;
 		font-family: var(--font-body);
 	}
 </style>

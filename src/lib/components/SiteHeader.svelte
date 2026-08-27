@@ -1,132 +1,275 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { animate } from 'motion';
 	import { page } from '$app/state';
 	import { team } from '$lib/data/teams';
 
-	const pageLinks = [
-		{ href: '/', label: 'home' },
-		{ href: '/history', label: 'history' },
-		{ href: '/sponsors', label: 'sponsors' }
+	const EASE = [0.16, 1, 0.3, 1] as const;
+
+	const allPages = [
+		{ href: '/', label: 'Home' },
+		{ href: '/history', label: 'History' },
+		{ href: '/sponsors', label: 'Sponsors' }
 	];
 
-	function isActive(href: string) {
-		return href === '/' ? page.url.pathname === '/' : page.url.pathname.startsWith(href);
+	const otherPages = $derived(allPages.filter((item) => item.href !== page.url.pathname));
+	const isHome = $derived(page.url.pathname === '/');
+
+	let navEl: HTMLElement;
+	let menuOpen = $state(false);
+	let menuEl: HTMLDivElement | undefined = $state();
+
+	onMount(() => {
+		animate(navEl, { opacity: [0, 1], y: [-16, 0] }, { duration: 0.8, ease: EASE });
+	});
+
+	function toggleMenu() {
+		menuOpen = !menuOpen;
 	}
+
+	$effect(() => {
+		if (!menuOpen) return;
+
+		function handlePointerDown(event: PointerEvent) {
+			if (menuEl && !menuEl.contains(event.target as Node)) menuOpen = false;
+		}
+		function handleKeydown(event: KeyboardEvent) {
+			if (event.key === 'Escape') menuOpen = false;
+		}
+
+		window.addEventListener('pointerdown', handlePointerDown);
+		window.addEventListener('keydown', handleKeydown);
+		return () => {
+			window.removeEventListener('pointerdown', handlePointerDown);
+			window.removeEventListener('keydown', handleKeydown);
+		};
+	});
 </script>
 
-<header class="site-header">
-	<div class="header-inner">
-		<a class="team-identity" href="/">
-			<img class="team-logo" src="/logo.png" alt="{team.name} logo" />
-			<span class="team-text">
-				<span class="team-name heading-display">{team.name}</span>
-				<span class="team-meta">FTC {team.number} · Redmond WA</span>
-			</span>
+<nav bind:this={navEl} class="site-navbar" class:transparent={isHome}>
+	<div class="navbar-left">
+		<a class="brand" href="/">
+			<img class="logo" src="/logo.png" alt="{team.name} logo" />
+			<span class="brand-text">{team.name}</span>
 		</a>
 
-		<nav class="nav-row">
-			{#each pageLinks as link (link.href)}
-				<a href={link.href} class="nav-link" class:active={isActive(link.href)}>{link.label}</a>
-			{/each}
-		</nav>
-
-		<div class="header-spacer" aria-hidden="true"></div>
+		<div class="tags-pill">
+			<span>FTC {team.number}</span>
+			<span class="tags-divider" aria-hidden="true"></span>
+			<span>Redmond WA</span>
+		</div>
 	</div>
-</header>
+
+	<div class="navbar-right">
+		<a
+			class="icon-button"
+			href="https://instagram.com/clubrhsrobotics"
+			target="_blank"
+			rel="noopener"
+			aria-label="Bot Not Found on Instagram"
+		>
+			<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+				<rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6" />
+				<circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6" />
+				<circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" />
+			</svg>
+		</a>
+
+		<div class="page-menu" bind:this={menuEl}>
+			<button
+				type="button"
+				class="icon-button"
+				aria-haspopup="menu"
+				aria-expanded={menuOpen}
+				aria-label="Site pages"
+				onclick={toggleMenu}
+			>
+				<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+					<line
+						x1="4"
+						y1="7"
+						x2="20"
+						y2="7"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+					/>
+					<line
+						x1="4"
+						y1="12"
+						x2="20"
+						y2="12"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+					/>
+					<line
+						x1="4"
+						y1="17"
+						x2="20"
+						y2="17"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+					/>
+				</svg>
+			</button>
+
+			{#if menuOpen}
+				<div class="page-popup" role="menu">
+					{#each otherPages as item (item.href)}
+						<a href={item.href} role="menuitem" onclick={() => (menuOpen = false)}>{item.label}</a>
+					{/each}
+				</div>
+			{/if}
+		</div>
+	</div>
+</nav>
 
 <style>
-	.site-header {
+	.site-navbar {
 		position: sticky;
 		top: 0;
-		z-index: 30;
-		background: #000000;
-		border-bottom: 1px solid var(--outline);
-	}
-
-	.header-inner {
-		max-width: var(--page-max);
-		margin: 0 auto;
-		padding: 18px 20px;
-		display: grid;
-		grid-template-columns: 1fr auto 1fr;
-		align-items: center;
-		gap: 20px;
-	}
-
-	.team-identity {
-		justify-self: start;
+		z-index: 50;
 		display: flex;
 		align-items: center;
-		gap: 12px;
-		min-width: 0;
+		justify-content: space-between;
+		gap: 14px;
+		padding: 16px;
+		background: #000000;
 	}
 
-	.team-logo {
-		width: 32px;
-		height: 32px;
+	.site-navbar.transparent {
+		background: transparent;
+	}
+
+	@media (min-width: 768px) {
+		.site-navbar {
+			padding: 24px 32px;
+		}
+	}
+
+	.navbar-left,
+	.navbar-right {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	@media (min-width: 768px) {
+		.navbar-left,
+		.navbar-right {
+			gap: 14px;
+		}
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.logo {
+		width: 26px;
+		height: 26px;
 		flex: none;
 		object-fit: contain;
 	}
 
-	.team-text {
+	.brand-text {
+		display: none;
+		font-size: 14px;
+		font-weight: 600;
+		letter-spacing: -0.01em;
+		color: #fff;
+	}
+
+	@media (min-width: 768px) {
+		.brand-text {
+			display: inline;
+		}
+	}
+
+	.tags-pill {
+		display: none;
+		align-items: center;
+		gap: 10px;
+		background: #1c1c1e;
+		border-radius: 999px;
+		padding: 8px 16px;
+		font-size: 11px;
+		color: rgba(255, 255, 255, 0.65);
+	}
+
+	@media (min-width: 768px) {
+		.tags-pill {
+			display: flex;
+		}
+	}
+
+	.tags-divider {
+		width: 1px;
+		height: 10px;
+		background: rgba(255, 255, 255, 0.15);
+	}
+
+	.page-menu {
+		position: relative;
+	}
+
+	.icon-button {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		background: #1c1c1e;
+		border: none;
+		display: grid;
+		place-items: center;
+		color: #fff;
+		cursor: pointer;
+		transition: background 0.2s ease;
+	}
+
+	@media (min-width: 768px) {
+		.icon-button {
+			width: 40px;
+			height: 40px;
+		}
+	}
+
+	.icon-button:hover,
+	.icon-button[aria-expanded='true'] {
+		background: #2c2c2e;
+	}
+
+	.icon-button svg {
+		width: 16px;
+		height: 16px;
+	}
+
+	.page-popup {
+		position: absolute;
+		top: calc(100% + 10px);
+		right: 0;
+		min-width: 160px;
 		display: flex;
 		flex-direction: column;
-		gap: 5px;
-		min-width: 0;
+		gap: 2px;
+		background: #1c1c1e;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		border-radius: 16px;
+		padding: 8px;
+		box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
 	}
 
-	.team-name {
-		font-size: clamp(19px, 2.2vw, 28px);
-		line-height: 1.05;
-		white-space: nowrap;
+	.page-popup a {
+		padding: 10px 12px;
+		border-radius: 10px;
+		font-size: 13px;
+		color: #fff;
 	}
 
-	.team-meta {
-		font-size: 11.5px;
-		font-weight: var(--weight-regular);
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--on-var);
-	}
-
-	.nav-row {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 56px;
-		flex-wrap: wrap;
-	}
-
-	.nav-link {
-		background: none;
-		border: none;
-		padding: 4px 0;
-		margin: 0;
-		font-size: 18px;
-		font-weight: var(--weight-regular);
-		letter-spacing: 0.01em;
-		text-transform: lowercase;
-		color: var(--on-var);
-		cursor: pointer;
-		transition:
-			color 0.2s ease,
-			text-shadow 0.2s ease;
-	}
-
-	.nav-link:hover {
-		color: var(--on-surface);
-		text-shadow:
-			0 0 14px currentColor,
-			0 0 4px currentColor;
-	}
-
-	.nav-link.active {
-		color: var(--primary);
-		text-shadow:
-			0 0 16px var(--primary),
-			0 0 5px var(--primary);
-	}
-
-	.header-spacer {
-		justify-self: end;
+	.page-popup a:hover {
+		background: rgba(255, 255, 255, 0.08);
 	}
 </style>
