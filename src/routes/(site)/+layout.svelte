@@ -1,5 +1,4 @@
 <script lang="ts">
-	import EmojiBackground from '$lib/components/EmojiBackground.svelte';
 	import SiteHeader from '$lib/components/SiteHeader.svelte';
 	import MottoBanner from '$lib/components/MottoBanner.svelte';
 	import SiteFooter from '$lib/components/SiteFooter.svelte';
@@ -7,8 +6,6 @@
 
 	let { children } = $props();
 </script>
-
-<EmojiBackground />
 
 <div class="app-shell">
 	<SiteHeader />
@@ -23,6 +20,7 @@
 	.app-shell {
 		position: relative;
 		min-height: 100vh;
+		background: var(--surface);
 		color: var(--on-surface);
 		overflow-x: hidden;
 	}

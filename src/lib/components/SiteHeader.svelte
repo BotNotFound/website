@@ -16,8 +16,11 @@
 <header class="site-header">
 	<div class="header-inner">
 		<a class="team-identity" href="/">
-			<span class="team-name heading-display">{team.name}</span>
-			<span class="team-meta">FTC {team.number} · Redmond WA</span>
+			<span class="team-logo">?</span>
+			<span class="team-text">
+				<span class="team-name heading-display">{team.name}</span>
+				<span class="team-meta">FTC {team.number} · Redmond WA</span>
+			</span>
 		</a>
 
 		<nav class="nav-row">
@@ -51,6 +54,27 @@
 
 	.team-identity {
 		justify-self: start;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		min-width: 0;
+	}
+
+	.team-logo {
+		width: 32px;
+		height: 32px;
+		flex: none;
+		border-radius: 50%;
+		background: var(--primary);
+		display: grid;
+		place-items: center;
+		font-family: var(--font-display);
+		font-size: 16px;
+		font-weight: 700;
+		color: var(--on-primary);
+	}
+
+	.team-text {
 		display: flex;
 		flex-direction: column;
 		gap: 5px;

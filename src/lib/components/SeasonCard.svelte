@@ -127,7 +127,8 @@
 	}
 
 	.season-photo-tag {
-		background: var(--sc-highest);
+		background: transparent;
+		border: 1px solid var(--outline);
 		border-radius: 999px;
 		padding: 10px 18px;
 		font-size: 11px;

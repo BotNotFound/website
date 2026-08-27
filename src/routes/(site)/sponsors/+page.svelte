@@ -72,7 +72,7 @@
 	}
 
 	.contact-card {
-		background: var(--sc-high);
+		background: transparent;
 		border: 1px solid var(--outline);
 		border-radius: var(--radius-card);
 		padding: 32px;

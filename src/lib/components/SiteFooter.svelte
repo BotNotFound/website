@@ -26,7 +26,6 @@
 <style>
 	.site-footer {
 		margin-top: 40px;
-		background: var(--sc-low);
 		border-top: 1px solid var(--outline);
 	}
 

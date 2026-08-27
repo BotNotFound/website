@@ -1,5 +1,5 @@
 :root {
-	--surface: #252626;
+	--surface: #000000;
 	--sc-low: #0a0a0a;
 	--sc: #0e0e0e;
 	--sc-high: #151515;
@@ -83,8 +83,9 @@ button {
 	}
 }
 
-/* Shared primitives reused across page sections. Flat surfaces, thin outline
-   borders, no drop shadows -- editorial rather than "app UI with elevation". */
+/* Shared primitives reused across page sections. No filled boxes -- the hero
+   page's black canvas with hairline outlines and pill chips is the model:
+   content floats on plain black, with just a thin border for grouping. */
 
 .page-main {
 	max-width: var(--page-max);
@@ -97,13 +98,13 @@ button {
 }
 
 .panel {
-	background: var(--sc-low);
+	background: transparent;
 	border: 1px solid var(--outline);
 	border-radius: var(--radius-panel);
 }
 
 .card {
-	background: var(--sc);
+	background: transparent;
 	border: 1px solid var(--outline);
 	border-radius: var(--radius-card);
 }

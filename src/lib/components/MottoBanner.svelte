@@ -3,7 +3,7 @@
 </script>
 
 <section class="motto-shell">
-	<div class="motto panel">
+	<div class="motto">
 		{#each words as word (word)}
 			<span class="motto-word heading-display">{word}</span>
 		{/each}
