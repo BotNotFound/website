@@ -29,13 +29,6 @@
 	--page-max: none;
 }
 
-[data-team='found'] {
-	--primary: #4d8aff;
-	--on-primary: #000000;
-	--p-container: #4d8aff;
-	--on-p-container: #000000;
-}
-
 * {
 	box-sizing: border-box;
 }

@@ -1,5 +1,3 @@
-export type TeamKey = 'notfound' | 'found';
-
 export interface Spec {
 	k: string;
 	v: string;
@@ -43,7 +41,6 @@ export interface Partner {
 }
 
 export interface TeamData {
-	key: TeamKey;
 	name: string;
 	number: string;
 	eyebrow: string;

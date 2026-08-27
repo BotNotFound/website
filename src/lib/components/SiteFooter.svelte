@@ -1,31 +1,10 @@
 <script lang="ts">
-	import { teams, siblingOf } from '$lib/data/teams';
-	import { teamSelection } from '$lib/state/team.svelte';
-
-	const team = $derived(teams[teamSelection.current]);
-	const sibling = $derived(teams[siblingOf(teamSelection.current)]);
+	import { team } from '$lib/data/teams';
 </script>
 
 <footer class="site-footer">
 	<div class="footer-bar">
-		<button
-			type="button"
-			class="team-switch"
-			onclick={() => teamSelection.select(sibling.key)}
-			aria-label={`Switch to ${sibling.name}`}
-			title={`Switch to sister team: ${sibling.name} · ${sibling.number}`}
-		>
-			{team.name}
-			<svg class="chevron" viewBox="0 0 24 24" fill="none">
-				<path
-					d="M6 9l6 6 6-6"
-					stroke="currentColor"
-					stroke-width="1.6"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				/>
-			</svg>
-		</button>
+		<a href="/" class="team-name-link">{team.name}</a>
 
 		<nav class="footer-links">
 			<a href="/">home</a>
@@ -62,27 +41,14 @@
 		flex-wrap: wrap;
 	}
 
-	.team-switch {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		background: none;
-		border: none;
-		padding: 0;
+	.team-name-link {
 		font-size: 13.5px;
 		font-weight: var(--weight-regular);
 		color: var(--on-surface);
-		cursor: pointer;
-		transition: color 0.2s ease;
 	}
 
-	.team-switch:hover {
+	.team-name-link:hover {
 		color: var(--primary);
-	}
-
-	.chevron {
-		width: 14px;
-		height: 14px;
 	}
 
 	.footer-links {
