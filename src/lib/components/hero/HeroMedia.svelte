@@ -16,7 +16,7 @@
 		function handlePointerMove(event: PointerEvent) {
 			const nx = (event.clientX / window.innerWidth) * 2 - 1;
 			const ny = (event.clientY / window.innerHeight) * 2 - 1;
-			glowEl.style.transform = `translate(calc(-50% + ${nx * 24}px), ${ny * 14}px)`;
+			glowEl.style.transform = `translate(${nx * 26}px, ${ny * 16}px)`;
 		}
 
 		window.addEventListener('pointermove', handlePointerMove);
@@ -42,18 +42,17 @@
 
 	.hero-glow {
 		position: absolute;
-		top: -10%;
-		left: 50%;
-		transform: translate(-50%, 0);
-		width: min(1100px, 140vw);
-		aspect-ratio: 1;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 65vh;
 		background: radial-gradient(
-			closest-side,
+			ellipse 70% 100% at 50% 0%,
 			rgba(255, 43, 38, 0.55) 0%,
-			rgba(255, 43, 38, 0.22) 45%,
+			rgba(255, 43, 38, 0.2) 45%,
 			transparent 75%
 		);
-		filter: blur(70px);
+		filter: blur(60px);
 		pointer-events: none;
 		transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 	}
