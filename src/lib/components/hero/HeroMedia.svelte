@@ -5,13 +5,27 @@
 	import HeroRobotModel from './HeroRobotModel.svelte';
 
 	let wrapperEl: HTMLDivElement;
+	let glowEl: HTMLDivElement;
 
 	onMount(() => {
 		animate(wrapperEl, { opacity: [0, 1], scale: [1.05, 1] }, { duration: 1.8, ease: HERO_EASE });
+
+		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		if (prefersReducedMotion) return;
+
+		function handlePointerMove(event: PointerEvent) {
+			const nx = (event.clientX / window.innerWidth) * 2 - 1;
+			const ny = (event.clientY / window.innerHeight) * 2 - 1;
+			glowEl.style.transform = `translate(calc(-50% + ${nx * 24}px), ${ny * 14}px)`;
+		}
+
+		window.addEventListener('pointermove', handlePointerMove);
+		return () => window.removeEventListener('pointermove', handlePointerMove);
 	});
 </script>
 
 <div bind:this={wrapperEl} class="hero-media-backdrop">
+	<div bind:this={glowEl} class="hero-glow" aria-hidden="true"></div>
 	<div class="hero-media-wrapper">
 		<div class="hero-model-frame">
 			<HeroRobotModel />
@@ -24,6 +38,24 @@
 		position: absolute;
 		inset: 0;
 		z-index: 0;
+	}
+
+	.hero-glow {
+		position: absolute;
+		top: -10%;
+		left: 50%;
+		transform: translate(-50%, 0);
+		width: min(1100px, 140vw);
+		aspect-ratio: 1;
+		background: radial-gradient(
+			closest-side,
+			rgba(255, 43, 38, 0.55) 0%,
+			rgba(255, 43, 38, 0.22) 45%,
+			transparent 75%
+		);
+		filter: blur(70px);
+		pointer-events: none;
+		transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
 	.hero-media-wrapper {
@@ -46,8 +78,8 @@
 
 	.hero-model-frame {
 		position: relative;
-		width: min(70vmin, 700px);
+		z-index: 1;
+		width: min(50vmin, 480px);
 		aspect-ratio: 1;
-		filter: drop-shadow(0 20px 40px rgba(255, 255, 255, 0.15));
 	}
 </style>

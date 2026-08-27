@@ -52,9 +52,7 @@
 		</div>
 
 		<div class="hero-footer-right">
-			{#each team.motto as word (word)}
-				<span class="hero-tag">{word}</span>
-			{/each}
+			<span class="hero-tag">Redshift V2</span>
 		</div>
 	</div>
 </div>
@@ -183,7 +181,6 @@
 		padding: 8px 16px;
 		border-radius: 999px;
 		background: #000;
-		border: 1px solid rgba(255, 255, 255, 0.12);
 		color: rgba(255, 255, 255, 0.7);
 	}
 </style>

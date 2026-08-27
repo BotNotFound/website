@@ -16,7 +16,7 @@
 <header class="site-header">
 	<div class="header-inner">
 		<a class="team-identity" href="/">
-			<span class="team-logo">?</span>
+			<img class="team-logo" src="/logo.png" alt="{team.name} logo" />
 			<span class="team-text">
 				<span class="team-name heading-display">{team.name}</span>
 				<span class="team-meta">FTC {team.number} · Redmond WA</span>
@@ -64,14 +64,7 @@
 		width: 32px;
 		height: 32px;
 		flex: none;
-		border-radius: 50%;
-		background: var(--primary);
-		display: grid;
-		place-items: center;
-		font-family: var(--font-display);
-		font-size: 16px;
-		font-weight: 700;
-		color: var(--on-primary);
+		object-fit: contain;
 	}
 
 	.team-text {
