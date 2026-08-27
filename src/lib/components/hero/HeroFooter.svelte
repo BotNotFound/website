@@ -111,11 +111,12 @@
 	.hero-heading {
 		margin: 0;
 		max-width: 14ch;
-		font-weight: 300;
-		letter-spacing: -0.03em;
+		font-family: var(--font-hero-heading);
+		font-weight: 700;
+		letter-spacing: -0.01em;
 		line-height: 1.05;
 		color: #fff;
-		font-size: clamp(2rem, 8vw, 4.5rem);
+		font-size: clamp(1.6rem, 6vw, 3.4rem);
 	}
 
 	.hero-heading em {
@@ -125,7 +126,7 @@
 
 	@media (min-width: 768px) {
 		.hero-heading {
-			font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+			font-size: clamp(2rem, 4vw, 3.4rem);
 		}
 	}
 

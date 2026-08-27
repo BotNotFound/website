@@ -12,11 +12,9 @@
 	--p-container: #ff2b26;
 	--on-p-container: #000000;
 
-	/* teenage engineering runs a single grotesque family (Univers Next Pro Thin) at
-	   very light weights everywhere, from headlines down to nav labels. Univers Next
-	   Pro is a licensed font, so Inter stands in as the closest freely-licensable match. */
-	--font-display: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	--font-body: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	--font-display: 'JetBrains Mono', 'Courier New', monospace;
+	--font-body: 'JetBrains Mono', 'Courier New', monospace;
+	--font-hero-heading: 'Ignis et Glacies Sharp', 'JetBrains Mono', monospace;
 	--weight-thin: 200;
 	--weight-light: 300;
 	--weight-regular: 400;
@@ -27,6 +25,14 @@
 	--radius-full: 999px;
 
 	--page-max: none;
+}
+
+@font-face {
+	font-family: 'Ignis et Glacies Sharp';
+	src: url('/fonts/IgnisEtGlaciesSharp-Bold.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
 }
 
 * {
