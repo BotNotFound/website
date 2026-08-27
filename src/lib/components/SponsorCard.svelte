@@ -19,8 +19,8 @@
 
 <style>
 	.sponsor-card {
-		width: 100%;
-		height: 100%;
+		flex: 1 1 210px;
+		max-width: 260px;
 		border-radius: 28px;
 		padding: 22px;
 		display: flex;

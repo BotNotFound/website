@@ -7,27 +7,36 @@
 	const groups = $derived(groupSponsorsByTier(sponsors));
 </script>
 
-<div class="sponsor-grid">
+<div class="sponsor-tiers">
 	{#each groups as group (group.tier)}
-		<div class="tier-header">
-			<span class="tier-chip tier-{group.tier}">{group.label}</span>
-			<span class="tier-amount">{group.amount}</span>
+		<div class="tier-group">
+			<div class="tier-header">
+				<span class="tier-chip tier-{group.tier}">{group.label}</span>
+				<span class="tier-amount">{group.amount}</span>
+			</div>
+			<div class="tier-row">
+				{#each group.sponsors as sponsor (sponsor.name)}
+					<SponsorCard {sponsor} />
+				{/each}
+			</div>
 		</div>
-		{#each group.sponsors as sponsor (sponsor.name)}
-			<SponsorCard {sponsor} />
-		{/each}
 	{/each}
 </div>
 
 <style>
-	.sponsor-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+	.sponsor-tiers {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.tier-row {
+		display: flex;
+		flex-wrap: wrap;
 		gap: 14px;
 	}
 
 	.tier-header {
-		grid-column: 1 / -1;
 		display: flex;
 		align-items: center;
 		gap: 14px;

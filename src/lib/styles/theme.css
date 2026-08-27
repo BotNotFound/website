@@ -26,7 +26,7 @@
 	--radius-card: 20px;
 	--radius-full: 999px;
 
-	--page-max: 1280px;
+	--page-max: none;
 }
 
 [data-team='found'] {
