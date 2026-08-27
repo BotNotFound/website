@@ -56,22 +56,18 @@
 		transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
+	/* Has to stay at least as wide as .hero-model-frame. If it's narrower the
+	   auto grid track grows past the wrapper's right edge rather than centering,
+	   which pushes the model off-centre by half the overflow on narrow screens. */
 	.hero-media-wrapper {
 		position: absolute;
 		top: 38%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		width: 80%;
-		height: 80%;
+		width: 100%;
+		height: 100%;
 		display: grid;
 		place-items: center;
-	}
-
-	@media (min-width: 768px) {
-		.hero-media-wrapper {
-			width: 100%;
-			height: 100%;
-		}
 	}
 
 	.hero-model-frame {

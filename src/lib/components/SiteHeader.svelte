@@ -49,15 +49,8 @@
 <nav bind:this={navEl} class="site-navbar" class:transparent={isHome}>
 	<div class="navbar-left">
 		<a class="brand" href="/">
-			<img class="logo" src="/logo.png" alt="{team.name} logo" />
-			<span class="brand-text">{team.name}</span>
+			<img class="logo" src="/logo.png" alt="{team.name}, FTC {team.number}, Redmond WA" />
 		</a>
-
-		<div class="tags-pill">
-			<span>FTC {team.number}</span>
-			<span class="tags-divider" aria-hidden="true"></span>
-			<span>Redmond WA</span>
-		</div>
 	</div>
 
 	<div class="navbar-right">
@@ -166,51 +159,19 @@
 	.brand {
 		display: flex;
 		align-items: center;
-		gap: 8px;
 	}
 
 	.logo {
-		width: 26px;
-		height: 26px;
+		height: 60px;
+		width: auto;
 		flex: none;
 		object-fit: contain;
 	}
 
-	.brand-text {
-		display: none;
-		font-size: 14px;
-		font-weight: 600;
-		letter-spacing: -0.01em;
-		color: #fff;
-	}
-
 	@media (min-width: 768px) {
-		.brand-text {
-			display: inline;
+		.logo {
+			height: 76px;
 		}
-	}
-
-	.tags-pill {
-		display: none;
-		align-items: center;
-		gap: 10px;
-		background: #1c1c1e;
-		border-radius: 999px;
-		padding: 8px 16px;
-		font-size: 11px;
-		color: rgba(255, 255, 255, 0.65);
-	}
-
-	@media (min-width: 768px) {
-		.tags-pill {
-			display: flex;
-		}
-	}
-
-	.tags-divider {
-		width: 1px;
-		height: 10px;
-		background: rgba(255, 255, 255, 0.15);
 	}
 
 	.page-menu {

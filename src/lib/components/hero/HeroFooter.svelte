@@ -174,13 +174,22 @@
 		flex-wrap: wrap;
 	}
 
+	/* Stacked under the heading on mobile, so it drops the pill padding to keep
+	   its text on the same left edge as the heading and buttons. The pill only
+	   makes sense once it sits off on its own in the bottom-right corner. */
 	.hero-tag {
 		font-size: 11px;
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
-		padding: 8px 16px;
-		border-radius: 999px;
-		background: #000;
+		padding: 8px 0;
 		color: rgba(255, 255, 255, 0.7);
+	}
+
+	@media (min-width: 768px) {
+		.hero-tag {
+			padding: 8px 16px;
+			border-radius: 999px;
+			background: #000;
+		}
 	}
 </style>
