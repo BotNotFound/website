@@ -61,13 +61,15 @@
 	}
 
 	.intro-title {
-		font-size: clamp(24px, 2.7vw, 36px);
-		line-height: 1.22;
+		font-size: clamp(26px, 3.2vw, 42px);
+		line-height: 1.15;
+		letter-spacing: -0.015em;
 		margin: 0 0 24px;
 	}
 
 	.intro-lede {
 		font-size: 16.5px;
+		font-weight: var(--weight-light);
 		line-height: 1.68;
 		max-width: 52ch;
 	}
@@ -75,12 +77,13 @@
 	.contact-card {
 		background: var(--sc-high);
 		border: 1px solid var(--outline);
-		border-radius: 28px;
+		border-radius: var(--radius-card);
 		padding: 32px;
 	}
 
 	.contact-label {
 		font-size: 11px;
+		font-weight: var(--weight-medium);
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		color: var(--primary);
@@ -89,6 +92,7 @@
 
 	.contact-copy {
 		font-size: 15px;
+		font-weight: var(--weight-light);
 		line-height: 1.65;
 		color: var(--on-var);
 		margin: 0 0 24px;
@@ -99,10 +103,10 @@
 		align-items: center;
 		background: var(--primary);
 		color: var(--on-primary);
-		border-radius: 999px;
+		border-radius: var(--radius-full);
 		padding: 14px 26px;
 		font-size: 13.5px;
-		font-weight: 600;
+		font-weight: var(--weight-medium);
 	}
 
 	.contact-email:hover {
@@ -136,9 +140,11 @@
 	}
 
 	.pitch-headline {
-		font-size: clamp(18px, 1.9vw, 25px);
-		font-weight: 500;
+		font-family: var(--font-display);
+		font-size: clamp(18px, 1.9vw, 26px);
+		font-weight: var(--weight-thin);
 		line-height: 1.42;
+		letter-spacing: -0.01em;
 		margin: 0;
 		max-width: 34ch;
 		color: var(--primary);

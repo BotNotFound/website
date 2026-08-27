@@ -36,28 +36,26 @@
 	}
 
 	.tier-chip {
-		border-radius: 999px;
-		padding: 8px 20px;
+		padding-bottom: 6px;
+		border-bottom: 2px solid currentColor;
 		font-family: var(--font-display);
-		font-size: 17px;
-		font-weight: 700;
+		font-size: 16px;
+		font-weight: var(--weight-medium);
+		letter-spacing: 0.02em;
 		text-transform: uppercase;
 	}
 
 	.tier-chip.tier-gold {
-		background: var(--primary);
-		color: var(--on-primary);
+		color: var(--primary);
 	}
 
 	.tier-chip.tier-silver {
-		background: var(--on-surface);
-		color: var(--surface);
+		color: var(--on-surface);
 	}
 
 	.tier-chip.tier-bronze {
-		background: var(--sc-highest);
-		color: var(--on-surface);
-		border: 1px solid var(--outline);
+		color: var(--on-var);
+		border-bottom-color: var(--outline);
 	}
 
 	.tier-amount {

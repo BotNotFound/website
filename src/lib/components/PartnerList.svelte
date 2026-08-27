@@ -21,7 +21,7 @@
 	}
 
 	.partner-chip {
-		border-radius: 999px;
+		border-radius: var(--radius-full);
 		padding: 14px 24px;
 		display: flex;
 		align-items: baseline;
@@ -31,7 +31,7 @@
 
 	.partner-name {
 		font-size: 14.5px;
-		font-weight: 600;
+		font-weight: var(--weight-medium);
 	}
 
 	.partner-note {

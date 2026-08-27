@@ -25,10 +25,11 @@
 
 	.mission-attr {
 		display: inline-flex;
-		background: var(--sc-high);
-		border-radius: 999px;
+		border: 1px solid var(--outline);
+		border-radius: var(--radius-full);
 		padding: 7px 15px;
 		font-size: 11px;
+		font-weight: var(--weight-regular);
 		letter-spacing: 0.09em;
 		text-transform: uppercase;
 		color: var(--on-var);
@@ -40,8 +41,9 @@
 	}
 
 	.mission-big {
-		font-size: clamp(19px, 2vw, 27px);
-		font-weight: 500;
+		font-family: var(--font-display);
+		font-size: clamp(19px, 2vw, 28px);
+		font-weight: var(--weight-thin);
 		line-height: 1.42;
 		letter-spacing: -0.01em;
 		margin: 0 0 26px;

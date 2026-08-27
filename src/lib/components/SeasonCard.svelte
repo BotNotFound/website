@@ -53,26 +53,29 @@
 	}
 
 	.season-years {
-		background: var(--p-container);
-		color: var(--on-p-container);
-		border-radius: 999px;
-		padding: 6px 14px;
-		font-size: 11.5px;
+		color: var(--primary);
+		font-weight: var(--weight-medium);
+		font-size: 12px;
 		letter-spacing: 0.07em;
 	}
 
 	.season-tag {
-		background: var(--sc-high);
 		color: var(--on-var);
-		border-radius: 999px;
-		padding: 6px 14px;
 		font-size: 10.5px;
+		font-weight: var(--weight-regular);
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
 	}
 
+	.season-tag::before {
+		content: '·';
+		margin-right: 10px;
+		color: var(--outline);
+	}
+
 	.season-game {
-		font-size: 22px;
+		font-size: 24px;
+		font-weight: var(--weight-thin);
 		line-height: 1.3;
 		margin: 0 0 16px;
 	}
@@ -101,6 +104,7 @@
 
 	.log-key {
 		font-size: 11px;
+		font-weight: var(--weight-medium);
 		letter-spacing: 0.09em;
 		text-transform: uppercase;
 		color: var(--primary);

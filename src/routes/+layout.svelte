@@ -16,7 +16,7 @@
 	<link rel="icon" href={favicon} />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 	<link
-		href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap"
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@200..700&display=swap"
 		rel="stylesheet"
 	/>
 </svelte:head>
@@ -36,6 +36,5 @@
 		background: var(--surface);
 		color: var(--on-surface);
 		overflow-x: hidden;
-		padding: 0 0 20px;
 	}
 </style>

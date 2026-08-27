@@ -22,26 +22,23 @@
 	}
 
 	.pillar-card {
-		border-radius: 32px;
+		border-radius: var(--radius-panel);
 		padding: 34px 32px;
 	}
 
 	.pillar-index {
-		width: 34px;
-		height: 34px;
-		border-radius: 999px;
-		background: var(--p-container);
-		color: var(--on-p-container);
-		display: grid;
-		place-items: center;
-		font-size: 12px;
-		font-weight: 700;
-		margin-bottom: 18px;
+		font-family: var(--font-display);
+		font-size: 13px;
+		font-weight: var(--weight-medium);
+		letter-spacing: 0.05em;
+		color: var(--primary);
+		margin-bottom: 22px;
 	}
 
 	.pillar-title {
-		font-size: 18px;
-		line-height: 1.3;
+		font-size: 19px;
+		font-weight: var(--weight-light);
+		letter-spacing: 0;
 		margin-bottom: 14px;
 	}
 

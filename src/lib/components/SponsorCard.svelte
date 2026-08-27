@@ -52,7 +52,7 @@
 
 	.sponsor-name {
 		font-size: 15px;
-		font-weight: 600;
+		font-weight: var(--weight-medium);
 		margin-bottom: 5px;
 	}
 

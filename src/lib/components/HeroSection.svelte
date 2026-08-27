@@ -38,20 +38,22 @@
 	}
 
 	.hero-title {
-		font-size: clamp(26px, 3.2vw, 46px);
-		line-height: 1.2;
-		letter-spacing: -0.01em;
+		font-size: clamp(28px, 4.2vw, 60px);
+		line-height: 1.08;
+		letter-spacing: -0.02em;
 		margin: 26px 0;
 		text-wrap: balance;
 	}
 
 	.hero-em {
 		font-style: normal;
+		font-weight: var(--weight-regular);
 		color: var(--primary);
 	}
 
 	.hero-intro {
 		font-size: 17px;
+		font-weight: var(--weight-light);
 		line-height: 1.65;
 		color: var(--on-var);
 		max-width: 48ch;

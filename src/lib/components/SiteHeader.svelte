@@ -6,196 +6,276 @@
 
 	const team = $derived(teams[teamSelection.current]);
 
-	const navItems = [
-		{ label: 'Home', href: '/' },
-		{ label: 'History', href: '/history' },
-		{ label: 'Sponsors', href: '/sponsors' }
+	const pageLinks = [
+		{ href: '/', label: 'home' },
+		{ href: '/history', label: 'history' },
+		{ href: '/sponsors', label: 'sponsors' }
 	];
 
 	function isActive(href: string) {
 		return href === '/' ? page.url.pathname === '/' : page.url.pathname.startsWith(href);
 	}
 
+	let menuOpen = $state(false);
+	let menuEl: HTMLDivElement | undefined = $state();
+
+	function toggleMenu() {
+		menuOpen = !menuOpen;
+	}
+
 	function selectTeam(key: TeamKey) {
 		teamSelection.select(key);
+		menuOpen = false;
 	}
+
+	$effect(() => {
+		if (!menuOpen) return;
+
+		function handlePointerDown(event: PointerEvent) {
+			if (menuEl && !menuEl.contains(event.target as Node)) menuOpen = false;
+		}
+		function handleKeydown(event: KeyboardEvent) {
+			if (event.key === 'Escape') menuOpen = false;
+		}
+
+		window.addEventListener('pointerdown', handlePointerDown);
+		window.addEventListener('keydown', handleKeydown);
+		return () => {
+			window.removeEventListener('pointerdown', handlePointerDown);
+			window.removeEventListener('keydown', handleKeydown);
+		};
+	});
 </script>
 
-<div class="header-shell">
-	<div class="header-bar panel">
-		<a class="brand" href="/">
-			<span class="brand-mark">?</span>
-			<span class="brand-text">
-				<span class="brand-name heading-display">{team.name}</span>
-				<span class="brand-meta">FTC {team.number} · Redmond WA</span>
-			</span>
+<header class="site-header">
+	<div class="header-inner">
+		<a class="team-identity" href="/">
+			<span class="team-name heading-display">{team.name}</span>
+			<span class="team-meta">FTC {team.number} · Redmond WA</span>
 		</a>
 
-		<div class="header-controls">
-			<nav class="nav-pill">
-				{#each navItems as item (item.href)}
-					<a href={item.href} class="nav-link" class:active={isActive(item.href)}>{item.label}</a>
-				{/each}
-			</nav>
+		<nav class="nav-row">
+			{#each pageLinks as link (link.href)}
+				<a href={link.href} class="nav-link" class:active={isActive(link.href)}>{link.label}</a>
+			{/each}
+		</nav>
 
-			<div class="team-pill">
-				{#each Object.values(teams) as t (t.key)}
-					<button
-						type="button"
-						class="team-tab"
-						class:active={teamSelection.current === t.key}
-						onclick={() => selectTeam(t.key)}
-					>
-						<span class="team-tab-name">{t.name}</span>
-						<span class="team-tab-number">{t.number}</span>
-					</button>
-				{/each}
-			</div>
+		<div class="team-menu" bind:this={menuEl}>
+			<button
+				type="button"
+				class="menu-toggle"
+				aria-haspopup="menu"
+				aria-expanded={menuOpen}
+				aria-label="Switch team site"
+				onclick={toggleMenu}
+			>
+				<svg viewBox="0 0 24 24" fill="none">
+					<line x1="4" y1="7" x2="20" y2="7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+					<line
+						x1="4"
+						y1="12"
+						x2="20"
+						y2="12"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+					/>
+					<line
+						x1="4"
+						y1="17"
+						x2="20"
+						y2="17"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+					/>
+				</svg>
+			</button>
+
+			{#if menuOpen}
+				<div class="team-popup" role="menu">
+					<div class="team-popup-label">switch team site</div>
+					{#each Object.values(teams) as t (t.key)}
+						<button
+							type="button"
+							role="menuitem"
+							class="team-option"
+							class:active={teamSelection.current === t.key}
+							onclick={() => selectTeam(t.key)}
+						>
+							<span class="team-option-name">{t.name}</span>
+							<span class="team-option-number">{t.number}</span>
+						</button>
+					{/each}
+				</div>
+			{/if}
 		</div>
 	</div>
-</div>
+</header>
 
 <style>
-	.header-shell {
+	.site-header {
 		position: sticky;
 		top: 0;
 		z-index: 30;
-		padding: 16px 20px 10px;
-		background: linear-gradient(to bottom, var(--surface) 62%, transparent);
+		background: var(--surface);
+		border-bottom: 1px solid var(--outline);
 	}
 
-	.header-bar {
+	.header-inner {
 		max-width: var(--page-max);
 		margin: 0 auto;
-		background: var(--sc-high);
-		padding: 12px 16px 12px 20px;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 20px;
-		flex-wrap: wrap;
-	}
-
-	.brand {
-		display: flex;
-		align-items: center;
-		gap: 18px;
-		min-width: 0;
-	}
-
-	.brand-mark {
-		width: 56px;
-		height: 56px;
-		border-radius: 999px;
-		background: var(--primary);
+		padding: 18px 20px;
 		display: grid;
-		place-items: center;
-		flex: none;
-		font-family: var(--font-display);
-		font-size: 30px;
-		font-weight: 700;
-		color: var(--on-primary);
-		line-height: 1;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: center;
+		gap: 20px;
 	}
 
-	.brand-text {
+	.team-identity {
+		justify-self: start;
 		display: flex;
 		flex-direction: column;
 		gap: 5px;
 		min-width: 0;
 	}
 
-	.brand-name {
-		font-size: clamp(20px, 2.2vw, 30px);
+	.team-name {
+		font-size: clamp(19px, 2.2vw, 28px);
 		line-height: 1.05;
 		white-space: nowrap;
 	}
 
-	.brand-meta {
+	.team-meta {
 		font-size: 11.5px;
+		font-weight: var(--weight-regular);
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		color: var(--on-var);
 	}
 
-	.header-controls {
+	.nav-row {
 		display: flex;
 		align-items: center;
-		gap: 18px;
+		justify-content: center;
+		gap: 56px;
 		flex-wrap: wrap;
 	}
 
-	.nav-pill,
-	.team-pill {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		background: var(--sc-low);
-		border-radius: 999px;
-		padding: 5px;
-	}
-
-	.team-pill {
-		align-items: stretch;
-	}
-
 	.nav-link {
-		font-size: 13.5px;
-		font-weight: 500;
-		padding: 10px 20px;
-		border-radius: 999px;
-		background: transparent;
+		background: none;
+		border: none;
+		padding: 4px 0;
+		margin: 0;
+		font-size: 18px;
+		font-weight: var(--weight-regular);
+		letter-spacing: 0.01em;
+		text-transform: lowercase;
 		color: var(--on-var);
-		transition: background 0.2s ease;
+		cursor: pointer;
+		transition:
+			color 0.2s ease,
+			text-shadow 0.2s ease;
 	}
 
 	.nav-link:hover {
-		background: var(--sc-highest);
 		color: var(--on-surface);
+		text-shadow:
+			0 0 14px currentColor,
+			0 0 4px currentColor;
 	}
 
 	.nav-link.active {
-		background: var(--p-container);
-		color: var(--on-p-container);
+		color: var(--primary);
+		text-shadow:
+			0 0 16px var(--primary),
+			0 0 5px var(--primary);
 	}
 
-	.nav-link.active:hover {
-		background: var(--p-container);
-		color: var(--on-p-container);
+	.team-menu {
+		position: relative;
+		justify-self: end;
 	}
 
-	.team-tab {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		justify-content: center;
-		gap: 3px;
-		padding: 9px 18px;
+	.menu-toggle {
+		display: grid;
+		place-items: center;
+		width: 42px;
+		height: 42px;
 		border: none;
-		border-radius: 999px;
-		cursor: pointer;
-		text-align: left;
-		background: transparent;
+		border-radius: var(--radius-full);
+		background: none;
 		color: var(--on-var);
-		transition: all 0.22s cubic-bezier(0.2, 0, 0, 1);
+		cursor: pointer;
+		transition:
+			background 0.2s ease,
+			color 0.2s ease;
 	}
 
-	.team-tab.active {
-		background: var(--primary);
-		color: var(--on-primary);
+	.menu-toggle svg {
+		width: 22px;
+		height: 22px;
 	}
 
-	.team-tab-name {
-		font-family: var(--font-display);
-		font-size: 12px;
-		font-weight: 700;
-		line-height: 1.2;
+	.menu-toggle:hover,
+	.menu-toggle[aria-expanded='true'] {
+		background: var(--sc-high);
+		color: var(--on-surface);
+	}
+
+	.team-popup {
+		position: absolute;
+		top: calc(100% + 10px);
+		right: 0;
+		min-width: 240px;
+		background: var(--sc-high);
+		border: 1px solid var(--outline);
+		border-radius: var(--radius-card);
+		padding: 8px;
+		box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+	}
+
+	.team-popup-label {
+		padding: 8px 10px 6px;
+		font-size: 10.5px;
+		font-weight: var(--weight-medium);
+		letter-spacing: 0.1em;
 		text-transform: uppercase;
+		color: var(--on-var);
 	}
 
-	.team-tab-number {
-		font-size: 10px;
-		letter-spacing: 0.09em;
-		opacity: 0.75;
+	.team-option {
+		width: 100%;
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 12px;
+		padding: 10px;
+		border: none;
+		border-radius: calc(var(--radius-card) - 8px);
+		background: none;
+		color: var(--on-surface);
+		text-align: left;
+		cursor: pointer;
+		transition: background 0.15s ease;
+	}
+
+	.team-option:hover {
+		background: var(--sc-highest);
+	}
+
+	.team-option-name {
+		font-size: 14px;
+		font-weight: var(--weight-regular);
+	}
+
+	.team-option-number {
+		font-size: 12px;
+		color: var(--on-var);
+	}
+
+	.team-option.active .team-option-name,
+	.team-option.active .team-option-number {
+		color: var(--primary);
 	}
 </style>

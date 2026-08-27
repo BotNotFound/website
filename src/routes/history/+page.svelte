@@ -34,8 +34,9 @@
 	}
 
 	.history-title {
-		font-size: clamp(24px, 2.8vw, 38px);
-		line-height: 1.22;
+		font-size: clamp(26px, 3.4vw, 46px);
+		line-height: 1.15;
+		letter-spacing: -0.015em;
 		margin: 24px 0 0;
 	}
 
