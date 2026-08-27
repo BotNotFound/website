@@ -3,6 +3,7 @@
 	import * as THREE from 'three';
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 	import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+	import { heroModel } from '$lib/state/heroModel.svelte';
 
 	const MODEL_URL = '/robots/robot.glb';
 	const DRACO_DECODER_PATH = '/draco/';
@@ -143,10 +144,14 @@
 
 				pivot.add(framing);
 				renderFrame();
+				heroModel.ready = true;
 			},
 			undefined,
 			(error) => {
 				console.error('Failed to load robot model:', error);
+				// Let the loading screen clear anyway -- a stuck spinner over a
+				// broken model is worse than showing the empty hero.
+				heroModel.ready = true;
 			}
 		);
 
