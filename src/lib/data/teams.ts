@@ -8,8 +8,6 @@ export const team: TeamData = {
 	heroEm: 'robotics team.',
 	intro:
 		'Redmond High had no robotics club before 2023. Students had tried to start one around 25 times in the previous decade. The school has no shop and no STEM teacher free to advise a team, so we asked an English teacher and met off campus. Nine of us started it. Nine of us still run it, with a second team next to us now.',
-	heroImage: '/robots/redshift.png',
-	heroImageAlt: 'Redshift, the 23404 DECODE robot',
 	motto: ['Simplicity', 'Reliability', 'Efficiency'],
 	specs: [
 		{ k: 'Season', v: '2025–26 · DECODE' },

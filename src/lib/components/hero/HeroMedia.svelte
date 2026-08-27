@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { animate } from 'motion';
-	import { team } from '$lib/data/teams';
 	import { HERO_EASE } from './ease';
+	import HeroRobotModel from './HeroRobotModel.svelte';
 
 	let wrapperEl: HTMLDivElement;
 
@@ -13,8 +13,9 @@
 
 <div bind:this={wrapperEl} class="hero-media-backdrop">
 	<div class="hero-media-wrapper">
-		<div class="hero-media-stage" aria-hidden="true"></div>
-		<img class="hero-media-image" src={team.heroImage} alt={team.heroImageAlt} />
+		<div class="hero-model-frame">
+			<HeroRobotModel />
+		</div>
 	</div>
 </div>
 
@@ -27,7 +28,7 @@
 
 	.hero-media-wrapper {
 		position: absolute;
-		top: 50%;
+		top: 38%;
 		left: 50%;
 		transform: translate(-50%, -50%);
 		width: 80%;
@@ -43,22 +44,10 @@
 		}
 	}
 
-	.hero-media-stage {
-		position: absolute;
-		width: min(62vmin, 620px);
-		aspect-ratio: 1;
-		border-radius: 50%;
-		background: #0e0e0e;
-		border: 2px solid var(--primary);
-	}
-
-	.hero-media-image {
+	.hero-model-frame {
 		position: relative;
-		max-width: 68%;
-		max-height: 62vmin;
-		width: auto;
-		height: auto;
-		object-fit: contain;
-		filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+		width: min(70vmin, 700px);
+		aspect-ratio: 1;
+		filter: drop-shadow(0 20px 40px rgba(255, 255, 255, 0.15));
 	}
 </style>

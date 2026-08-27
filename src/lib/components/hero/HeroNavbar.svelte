@@ -21,7 +21,7 @@
 		<button type="button" class="hero-menu-pill">
 			<span class="hero-menu-icon">
 				<svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-					<path d="M12 5v14M5 12h14" stroke="#000" stroke-width="3" stroke-linecap="round" />
+					<path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="3" stroke-linecap="round" />
 				</svg>
 			</span>
 			<span class="hero-menu-label">Menu</span>
@@ -83,7 +83,7 @@
 		font-family: var(--font-display);
 		font-size: 12px;
 		font-weight: 700;
-		color: #000;
+		color: #fff;
 	}
 
 	.hero-brand-text {
@@ -91,7 +91,7 @@
 		font-size: 14px;
 		font-weight: 600;
 		letter-spacing: -0.01em;
-		color: #000;
+		color: #fff;
 	}
 
 	@media (min-width: 768px) {
@@ -104,7 +104,7 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
-		background: #000;
+		background: #fff;
 		border: none;
 		border-radius: 999px;
 		padding: 4px 14px 4px 4px;
@@ -116,7 +116,7 @@
 		width: 28px;
 		height: 28px;
 		border-radius: 50%;
-		background: #fff;
+		background: #000;
 		display: grid;
 		place-items: center;
 		flex: none;
@@ -131,18 +131,18 @@
 
 	.hero-menu-label {
 		font-size: 11px;
-		color: #fff;
+		color: #000;
 	}
 
 	.hero-tags-pill {
 		display: none;
 		align-items: center;
 		gap: 10px;
-		background: #f4f4f6;
+		background: #1c1c1e;
 		border-radius: 999px;
 		padding: 8px 16px;
 		font-size: 11px;
-		color: rgba(0, 0, 0, 0.65);
+		color: rgba(255, 255, 255, 0.65);
 	}
 
 	@media (min-width: 768px) {
@@ -154,6 +154,6 @@
 	.hero-tags-divider {
 		width: 1px;
 		height: 10px;
-		background: rgba(0, 0, 0, 0.15);
+		background: rgba(255, 255, 255, 0.15);
 	}
 </style>

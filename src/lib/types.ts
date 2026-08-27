@@ -47,8 +47,6 @@ export interface TeamData {
 	heroLine: string;
 	heroEm: string;
 	intro: string;
-	heroImage: string;
-	heroImageAlt: string;
 	motto: string[];
 	specs: Spec[];
 	photoSlot: string;

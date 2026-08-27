@@ -19,8 +19,8 @@
 	.hero-page {
 		position: relative;
 		min-height: 100vh;
-		background: #ffffff;
-		color: #000000;
+		background: #000000;
+		color: #ffffff;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;

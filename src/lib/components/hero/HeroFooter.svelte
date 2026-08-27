@@ -66,7 +66,7 @@
 		margin-top: auto;
 		width: 100%;
 		padding: 96px 16px 24px;
-		background: linear-gradient(to top, #ffffff 0%, rgba(255, 255, 255, 0.8) 50%, transparent 100%);
+		background: linear-gradient(to top, #000000 0%, rgba(0, 0, 0, 0.8) 50%, transparent 100%);
 	}
 
 	@media (min-width: 768px) {
@@ -100,14 +100,14 @@
 		align-items: center;
 		gap: 8px;
 		font-size: 13px;
-		color: rgba(0, 0, 0, 0.55);
+		color: rgba(255, 255, 255, 0.55);
 	}
 
 	.hero-dot {
 		width: 8px;
 		height: 8px;
 		border-radius: 50%;
-		background: #000;
+		background: #fff;
 		flex: none;
 	}
 
@@ -117,7 +117,7 @@
 		font-weight: 300;
 		letter-spacing: -0.03em;
 		line-height: 1.05;
-		color: #000;
+		color: #fff;
 		font-size: clamp(2rem, 8vw, 4.5rem);
 	}
 
@@ -151,23 +151,23 @@
 	}
 
 	.hero-btn-primary {
-		background: #000;
-		color: #fff;
+		background: #fff;
+		color: #000;
 		border: none;
 	}
 
 	.hero-btn-primary:hover {
-		color: #fff;
+		color: #000;
 	}
 
 	.hero-btn-secondary {
 		background: transparent;
-		color: #000;
-		border: 1px solid rgba(0, 0, 0, 0.35);
+		color: #fff;
+		border: 1px solid rgba(255, 255, 255, 0.35);
 	}
 
 	.hero-btn-secondary:hover {
-		color: #000;
+		color: #fff;
 	}
 
 	.hero-footer-right {
@@ -182,8 +182,8 @@
 		letter-spacing: 0.04em;
 		padding: 8px 16px;
 		border-radius: 999px;
-		background: #fff;
-		border: 1px solid rgba(0, 0, 0, 0.12);
-		color: rgba(0, 0, 0, 0.7);
+		background: #000;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		color: rgba(255, 255, 255, 0.7);
 	}
 </style>
