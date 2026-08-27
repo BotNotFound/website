@@ -77,7 +77,7 @@
 	.hero-model-frame {
 		position: relative;
 		z-index: 1;
-		width: min(72vmin, 680px);
+		width: min(97vmin, 920px);
 		aspect-ratio: 1;
 	}
 </style>

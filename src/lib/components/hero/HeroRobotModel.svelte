@@ -131,7 +131,12 @@
 				model.position.sub(center);
 
 				const maxDimension = Math.max(size.x, size.y, size.z) || 1;
-				const scale = 2.4 / maxDimension;
+				// Deliberately leaves ~17% empty margin on each side of the frustum.
+				// Perspective magnifies the geometry nearest the camera, so a model
+				// sized to fill the view clips against the canvas edge as soon as it
+				// tilts. The frame in HeroMedia is scaled up by the matching factor,
+				// so the robot's on-screen size is unchanged -- only the room around it.
+				const scale = 1.78 / maxDimension;
 				const framing = new THREE.Group();
 				framing.scale.setScalar(scale);
 				framing.add(model);
