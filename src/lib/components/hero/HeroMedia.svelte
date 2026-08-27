@@ -15,8 +15,7 @@
 
 		function handlePointerMove(event: PointerEvent) {
 			const nx = (event.clientX / window.innerWidth) * 2 - 1;
-			const ny = (event.clientY / window.innerHeight) * 2 - 1;
-			glowEl.style.transform = `translate(${nx * 26}px, ${ny * 16}px)`;
+			glowEl.style.transform = `translateX(${nx * 26}px)`;
 		}
 
 		window.addEventListener('pointermove', handlePointerMove);
@@ -78,7 +77,7 @@
 	.hero-model-frame {
 		position: relative;
 		z-index: 1;
-		width: min(50vmin, 480px);
+		width: min(72vmin, 680px);
 		aspect-ratio: 1;
 	}
 </style>

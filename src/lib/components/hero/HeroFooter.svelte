@@ -64,7 +64,6 @@
 		margin-top: auto;
 		width: 100%;
 		padding: 96px 16px 24px;
-		background: linear-gradient(to top, #000000 0%, rgba(0, 0, 0, 0.8) 50%, transparent 100%);
 	}
 
 	@media (min-width: 768px) {
