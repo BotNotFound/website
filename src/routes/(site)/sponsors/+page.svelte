@@ -73,7 +73,7 @@
 			</h2>
 		</header>
 
-		<div class="sp-close panel">
+		<div class="sp-close">
 			<div class="sp-pitch">
 				<p class="sp-pitch-headline">{team.sponsorPitch}</p>
 				<p class="body-copy sp-pitch-tail">{team.sponsorPitchTail}</p>
@@ -236,17 +236,19 @@
 		color: var(--on-var);
 	}
 
-	/* Same geometry as the history page's one panel (.tl-brief). */
+	/* Mirrors the masthead: pitch flush to the page's left edge, contact flush to
+	   its right. Bookending the page with the same two-column figure reads as
+	   deliberate, where a bordered box just fenced off a lot of empty width. */
 	.sp-close {
-		padding: 32px 36px;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 28px 44px;
-		align-items: start;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 30px 64px;
 	}
 
 	.sp-pitch {
-		flex: 1 1 340px;
+		flex: 1 1 380px;
 		min-width: 0;
 	}
 
@@ -261,15 +263,16 @@
 		color: var(--primary);
 	}
 
+	/* Same measure as .sponsors-lede so both ends of the page read alike. */
 	.sp-pitch-tail {
 		margin: 18px 0 0;
-		font-size: 15px;
-		line-height: 1.72;
-		max-width: 56ch;
+		font-size: 14.5px;
+		line-height: 1.7;
+		max-width: 46ch;
 	}
 
 	.sp-contact {
-		flex: 0 1 380px;
+		flex: 0 1 clamp(280px, 32vw, 440px);
 		min-width: 0;
 	}
 
