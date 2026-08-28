@@ -109,7 +109,10 @@
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-between;
-		align-items: flex-end;
+		/* Top-aligned for the same reason as the sponsors masthead: the aside is
+		   taller than the head at every width, so bottom-aligning drops the head
+		   and leaves a gap above the eyebrow. */
+		align-items: flex-start;
 		gap: 30px 64px;
 	}
 

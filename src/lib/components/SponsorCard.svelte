@@ -29,9 +29,8 @@
 <style>
 	/* One box, one internal hairline. The old card nested a bordered logo box
 	   inside a bordered card, which was the fussiest thing on the page. */
+	/* Sizing comes from the parent grid track, so no flex basis or max-width. */
 	.sponsor-card {
-		flex: 1 1 210px;
-		max-width: 260px;
 		border-radius: var(--radius-card);
 		padding: 0;
 		display: flex;
@@ -68,8 +67,8 @@
 	}
 
 	/* Sponsors with no logo art get their name set as a wordmark rather than an
-	   empty plate. They paid the same as the ones with art, and the gold tier is
-	   currently logo-less -- a grey "logo goes here" pill would visibly demote it. */
+	   empty plate -- a grey "logo goes here" pill would visibly demote them
+	   against the ones that supplied art. */
 	.sponsor-wordmark {
 		font-family: var(--font-display);
 		font-size: 15px;

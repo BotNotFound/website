@@ -27,15 +27,12 @@ export interface Season {
 	fig: string;
 }
 
-export type SponsorTier = 'gold' | 'silver' | 'bronze';
-
 export interface Sponsor {
-	tier: SponsorTier;
 	name: string;
 	note: string;
 	url: string;
 	/**
-	 * Path under /sponsors, e.g. "/sponsors/microsoft.png". Omitted when the team
+	 * Path under /sponsors, e.g. "/sponsors/polymaker.png". Omitted when the team
 	 * has no logo art yet -- the card falls back to a wordmark of the name.
 	 *
 	 * Asset contract: transparent PNG or SVG with light ink. It renders directly

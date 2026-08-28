@@ -1,7 +1,6 @@
 <script lang="ts">
-	import SponsorGrid from '$lib/components/SponsorGrid.svelte';
+	import SponsorCard from '$lib/components/SponsorCard.svelte';
 	import PartnerList from '$lib/components/PartnerList.svelte';
-	import { SPONSOR_TIERS } from '$lib/sponsors';
 	import { armReveals } from '$lib/actions/reveal';
 	import { team } from '$lib/data/teams';
 
@@ -29,23 +28,12 @@
 					<dd class="sponsors-stat-value">{team.sponsors.length}</dd>
 				</div>
 				<div class="sponsors-stat">
-					<dt class="sponsors-stat-label">Tiers</dt>
-					<dd class="sponsors-stat-value">{SPONSOR_TIERS.length}</dd>
+					<dt class="sponsors-stat-label">Partners</dt>
+					<dd class="sponsors-stat-value">{team.partners.length}</dd>
 				</div>
 			</dl>
 		</div>
 	</section>
-
-	<div class="sp-legend">
-		<span class="sp-legend-label">Tiers</span>
-		<div class="sp-legend-list">
-			{#each SPONSOR_TIERS as tier (tier.tier)}
-				<span class="sp-legend-item sp-legend-{tier.tier}">
-					{tier.label}<span class="sp-legend-amount">{tier.amount}</span>
-				</span>
-			{/each}
-		</div>
-	</div>
 
 	<section class="sp-section" aria-labelledby="sp-sponsors">
 		<header class="sp-head">
@@ -57,7 +45,11 @@
 				<span class="sp-chip">{team.sponsors.length} sponsors</span>
 			</div>
 		</header>
-		<SponsorGrid sponsors={team.sponsors} />
+		<div class="sponsor-row">
+			{#each team.sponsors as sponsor (sponsor.name)}
+				<SponsorCard {sponsor} />
+			{/each}
+		</div>
 	</section>
 
 	<section class="sp-section" aria-labelledby="sp-partners">
@@ -109,7 +101,11 @@
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-between;
-		align-items: flex-end;
+		/* Top-aligned, not bottom. The aside is content-heavy and the head is not,
+		   so their heights diverge with width -- bottom-aligning pushes the head
+		   down and opens a hole above the eyebrow (149px at 768). A ragged bottom
+		   is far less visible than a hole at the top edge. */
+		align-items: flex-start;
 		gap: 30px 64px;
 	}
 
@@ -118,11 +114,16 @@
 		min-width: 0;
 	}
 
+	/* Capped so this 41-character title always wraps to two lines. Left to run
+	   full width it collapses to one line above ~1700px, which drops the head to
+	   93px against the aside's 169px -- and flex-end then pushes the whole left
+	   column down, leaving a hole above the eyebrow. Monospace, so ch is exact. */
 	.sponsors-title {
 		font-size: clamp(26px, 3.4vw, 46px);
 		line-height: 1.12;
 		letter-spacing: -0.015em;
 		margin: 20px 0 0;
+		max-width: 26ch;
 	}
 
 	.sponsors-aside {
@@ -173,71 +174,6 @@
 		color: var(--on-surface);
 	}
 
-	/* Tier legend -- the tier/amount mapping as a ruled band rather than prose.
-	   Lists all three tiers even if one is currently empty: it is a pitch. */
-	.sp-legend {
-		display: flex;
-		align-items: center;
-		gap: clamp(12px, 2.4vw, 22px);
-		flex-wrap: wrap;
-		padding: 15px 0 16px;
-		border-top: 1px solid var(--outline);
-		border-bottom: 1px solid var(--outline);
-	}
-
-	.sp-legend-label {
-		display: inline-flex;
-		align-items: center;
-		gap: 9px;
-		font-size: 10px;
-		font-weight: var(--weight-medium);
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		color: var(--on-var);
-		flex: none;
-	}
-
-	.sp-legend-label::before {
-		content: '';
-		width: 5px;
-		height: 5px;
-		border-radius: var(--radius-full);
-		background: var(--primary);
-		flex: none;
-	}
-
-	.sp-legend-list {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 10px 26px;
-	}
-
-	.sp-legend-item {
-		font-size: 11px;
-		font-weight: var(--weight-medium);
-		letter-spacing: 0.09em;
-		text-transform: uppercase;
-	}
-
-	.sp-legend-gold {
-		color: var(--primary);
-	}
-
-	.sp-legend-silver {
-		color: var(--on-surface);
-	}
-
-	.sp-legend-bronze {
-		color: var(--on-var);
-	}
-
-	.sp-legend-amount {
-		margin-left: 10px;
-		font-weight: var(--weight-regular);
-		letter-spacing: 0.1em;
-		color: var(--on-var);
-	}
-
 	/* Ruled bands. .page-main's 28px gap sits above the rule, 24px below, so each
 	   rule binds to the section it opens. */
 	.sp-section {
@@ -245,11 +181,14 @@
 		padding-top: 24px;
 	}
 
-	/* The legend band already closes with a rule, so the section it opens must
-	   not draw its own -- otherwise two hairlines sit 28px apart. */
-	.sp-legend + .sp-section {
-		border-top: none;
-		padding-top: 0;
+	/* One flat pool -- no tiers, so every sponsor sits in the same grid.
+	   auto-FILL, not auto-fit: empty tracks are kept, so a card never stretches
+	   to half the page if the team ever drops to one or two sponsors. A single
+	   column still fills the width on phones. */
+	.sponsor-row {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+		gap: 14px;
 	}
 
 	.sp-head {
