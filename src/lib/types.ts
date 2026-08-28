@@ -34,7 +34,14 @@ export interface Sponsor {
 	name: string;
 	note: string;
 	url: string;
-	/** Path under /sponsors, e.g. "/sponsors/microsoft.png". Omitted when the team has no logo art yet. */
+	/**
+	 * Path under /sponsors, e.g. "/sponsors/microsoft.png". Omitted when the team
+	 * has no logo art yet -- the card falls back to a wordmark of the name.
+	 *
+	 * Asset contract: transparent PNG or SVG with light ink. It renders directly
+	 * on #000 with no plate behind it, so dark-on-transparent art disappears and
+	 * white-background art shows as a slab.
+	 */
 	logo?: string;
 }
 

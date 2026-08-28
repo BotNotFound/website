@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Season } from '$lib/types';
-	import { revealOnView } from './reveal';
+	import { revealOnView } from '$lib/actions/reveal';
 
 	let { season }: { season: Season } = $props();
 

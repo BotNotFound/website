@@ -1,14 +1,14 @@
 import { animate, inView } from 'motion';
-import { HERO_EASE } from '../hero/ease';
+import { HERO_EASE } from '$lib/components/hero/ease';
 
 let armedAt = 0;
 let batchAt = 0;
 let batchN = 0;
 
 /**
- * Called from the history page's <script> body, which runs on every mount and
- * before any child action. Resets the "was this already on screen at load"
- * window so navigating home -> history doesn't compare against module load.
+ * Called from a page's <script> body, which runs on every mount and before any
+ * child action. Resets the "was this already on screen at load" window so
+ * navigating between pages doesn't compare against module load.
  */
 export function armReveals() {
 	armedAt = performance.now();

@@ -1,16 +1,25 @@
 <script lang="ts">
+	import { revealOnView } from '$lib/actions/reveal';
 	import type { Sponsor } from '$lib/types';
 
 	let { sponsor }: { sponsor: Sponsor } = $props();
 </script>
 
-<a class="sponsor-card card" href={sponsor.url} target="_blank" rel="noopener">
-	<div
-		class="sponsor-logo"
-		role="img"
-		aria-label={sponsor.name}
-		style:background-image={`url('${sponsor.logo ?? '/sponsors/placeholder.png'}')`}
-	></div>
+<a class="sponsor-card card" href={sponsor.url} target="_blank" rel="noopener" use:revealOnView>
+	<div class="sponsor-plate">
+		{#if sponsor.logo}
+			<div
+				class="sponsor-logo"
+				role="img"
+				aria-label={sponsor.name}
+				style:background-image={`url('${sponsor.logo}')`}
+			></div>
+		{:else}
+			<!-- aria-hidden: .sponsor-name repeats this immediately below. -->
+			<div class="sponsor-wordmark" aria-hidden="true">{sponsor.name}</div>
+		{/if}
+	</div>
+
 	<div class="sponsor-details">
 		<div class="sponsor-name">{sponsor.name}</div>
 		<div class="sponsor-note">{sponsor.note}</div>
@@ -18,47 +27,73 @@
 </a>
 
 <style>
+	/* One box, one internal hairline. The old card nested a bordered logo box
+	   inside a bordered card, which was the fussiest thing on the page. */
 	.sponsor-card {
 		flex: 1 1 210px;
 		max-width: 260px;
-		border-radius: 28px;
-		padding: 22px;
+		border-radius: var(--radius-card);
+		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 14px;
 		color: var(--on-surface);
+		transition: border-color 0.18s ease;
 	}
 
 	.sponsor-card:hover {
 		border-color: var(--primary);
+		/* Held explicitly against the global a:hover { color: var(--primary) }. */
 		color: var(--on-surface);
 	}
 
-	.sponsor-logo {
+	.sponsor-card:focus-visible {
+		outline: 1px solid var(--primary);
+		outline-offset: 3px;
+	}
+
+	.sponsor-plate {
 		aspect-ratio: 5 / 3;
-		border-radius: 20px;
-		background-color: var(--sc);
-		border: 1px solid var(--outline);
+		display: grid;
+		place-items: center;
+		padding: 22px;
+		border-bottom: 1px solid var(--outline);
+	}
+
+	.sponsor-logo {
+		width: 100%;
+		height: 100%;
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: contain;
-		background-origin: content-box;
-		padding: 22px;
+	}
+
+	/* Sponsors with no logo art get their name set as a wordmark rather than an
+	   empty plate. They paid the same as the ones with art, and the gold tier is
+	   currently logo-less -- a grey "logo goes here" pill would visibly demote it. */
+	.sponsor-wordmark {
+		font-family: var(--font-display);
+		font-size: 15px;
+		font-weight: var(--weight-thin);
+		line-height: 1.3;
+		letter-spacing: 0.02em;
+		text-align: center;
+		text-transform: uppercase;
+		color: var(--on-surface);
 	}
 
 	.sponsor-details {
-		padding: 0 4px 4px;
+		padding: 16px 18px 18px;
 	}
 
 	.sponsor-name {
-		font-size: 15px;
+		font-size: 13.5px;
 		font-weight: var(--weight-medium);
-		margin-bottom: 5px;
+		margin-bottom: 6px;
 	}
 
 	.sponsor-note {
-		font-size: 12.5px;
-		line-height: 1.5;
+		font-size: 12px;
+		line-height: 1.55;
 		color: var(--on-var);
 	}
 </style>

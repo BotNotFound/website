@@ -3,7 +3,7 @@
 	import { animate, scroll } from 'motion';
 	import TimelineSeason from '$lib/components/timeline/TimelineSeason.svelte';
 	import SeasonScrubber from '$lib/components/timeline/SeasonScrubber.svelte';
-	import { armReveals } from '$lib/components/timeline/reveal';
+	import { armReveals } from '$lib/actions/reveal';
 	import { team } from '$lib/data/teams';
 
 	// Runs on every mount, before any child action, so reveals measure against
