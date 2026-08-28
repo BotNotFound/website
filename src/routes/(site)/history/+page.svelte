@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { animate, scroll } from 'motion';
 	import TimelineSeason from '$lib/components/timeline/TimelineSeason.svelte';
 	import SeasonScrubber from '$lib/components/timeline/SeasonScrubber.svelte';
 	import { armReveals } from '$lib/actions/reveal';
@@ -14,7 +13,6 @@
 
 	let activeIndex = $state(0);
 	let timelineEl: HTMLDivElement;
-	let railFillEl: HTMLDivElement;
 
 	function selectSeason(index: number) {
 		if (index === activeIndex) return;
@@ -39,19 +37,6 @@
 		return () => {
 			document.documentElement.style.scrollBehavior = '';
 		};
-	});
-
-	// Rebound whenever the season changes, since swapping panels changes the
-	// timeline's height and with it the scroll range the fill maps onto.
-	$effect(() => {
-		activeIndex;
-		if (!railFillEl || !timelineEl) return;
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-		return scroll(animate(railFillEl, { scaleY: [0, 1] }, { ease: 'linear', duration: 1 }), {
-			target: timelineEl,
-			offset: ['start 28%', 'end 72%']
-		});
 	});
 </script>
 
@@ -84,9 +69,7 @@
 	<SeasonScrubber seasons={team.seasons} {activeIndex} onselect={selectSeason} />
 
 	<div bind:this={timelineEl} class="history-timeline">
-		<div class="tl-rail" aria-hidden="true">
-			<div bind:this={railFillEl} class="tl-rail-fill"></div>
-		</div>
+		<div class="tl-rail" aria-hidden="true"></div>
 
 		{#key activeIndex}
 			<TimelineSeason season={team.seasons[activeIndex]} />
@@ -192,9 +175,9 @@
 		bottom: 0;
 		width: 1px;
 		background: var(--outline);
-		/* Fades both ends so the spine dissolves rather than stopping dead. The
-		   mask clips the fill child identically; markers are not children, so
-		   they stay crisp while the line dissolves around them. */
+		/* Fades both ends so the spine dissolves rather than stopping dead.
+		   Markers are not children, so they stay crisp while the line
+		   dissolves around them. */
 		-webkit-mask-image: linear-gradient(
 			to bottom,
 			transparent 0,
@@ -211,11 +194,4 @@
 		);
 	}
 
-	.tl-rail-fill {
-		position: absolute;
-		inset: 0;
-		background: var(--primary);
-		transform: scaleY(0);
-		transform-origin: top center;
-	}
 </style>
