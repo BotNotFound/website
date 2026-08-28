@@ -2,27 +2,21 @@
 	import type { Season } from '$lib/types';
 	import { revealOnView } from './reveal';
 
-	let {
-		season,
-		isPassed = false,
-		element = $bindable()
-	}: {
-		season: Season;
-		isPassed?: boolean;
-		element?: HTMLElement;
-	} = $props();
+	let { season }: { season: Season } = $props();
 
 	const pad = (i: number) => String(i + 1).padStart(2, '0');
 </script>
 
-<section
-	bind:this={element}
-	id={season.id}
+<!-- tabindex="0" so keyboard users can reach and scroll the panel itself, which
+     is the expected behaviour for a tabpanel holding this much content. -->
+<div
+	id="{season.id}-panel"
 	class="tl-season"
-	tabindex="-1"
-	aria-labelledby="{season.id}-title"
+	role="tabpanel"
+	tabindex="0"
+	aria-labelledby="{season.id}-tab"
 >
-	<span class="tl-marker tl-marker--season" class:is-passed={isPassed} aria-hidden="true"></span>
+	<span class="tl-marker tl-marker--season" aria-hidden="true"></span>
 
 	<header class="tl-head">
 		<h2 id="{season.id}-title" class="tl-title heading-display">
@@ -60,13 +54,11 @@
 			</li>
 		{/each}
 	</ol>
-</section>
+</div>
 
 <style>
 	.tl-season {
 		position: relative;
-		/* Keeps anchor jumps clear of the sticky site header + season index. */
-		scroll-margin-top: calc(var(--site-header-h, 124px) + var(--scrub-h, 66px) + 18px);
 	}
 
 	.tl-season:focus {
@@ -97,10 +89,13 @@
 			background-color 0.18s ease;
 	}
 
+	/* Always filled: only the selected season is on screen, so this reads as a
+	   "you are here" marker rather than progress through a list. */
 	.tl-marker--season {
 		width: 13px;
 		height: 13px;
 		top: 6px;
+		border-color: var(--primary);
 	}
 
 	.tl-marker--season::after {
@@ -108,15 +103,6 @@
 		position: absolute;
 		inset: 3px;
 		border-radius: var(--radius-full);
-		background: transparent;
-		transition: background-color 0.2s ease;
-	}
-
-	.tl-marker--season.is-passed {
-		border-color: var(--primary);
-	}
-
-	.tl-marker--season.is-passed::after {
 		background: var(--primary);
 	}
 

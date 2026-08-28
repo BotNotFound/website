@@ -13,57 +13,45 @@
 	const entryCount = team.seasons.reduce((total, season) => total + season.log.length, 0);
 
 	let activeIndex = $state(0);
-	let sectionEls: HTMLElement[] = $state([]);
 	let timelineEl: HTMLDivElement;
 	let railFillEl: HTMLDivElement;
 
+	function selectSeason(index: number) {
+		if (index === activeIndex) return;
+		activeIndex = index;
+
+		// If the timeline has scrolled up behind the sticky chrome, bring it back
+		// so the incoming season starts at its head rather than part-way down.
+		requestAnimationFrame(() => {
+			if (!timelineEl) return;
+			const style = getComputedStyle(document.documentElement);
+			const chrome =
+				(parseFloat(style.getPropertyValue('--site-header-h')) || 124) +
+				(parseFloat(style.getPropertyValue('--scrub-h')) || 66);
+			if (timelineEl.getBoundingClientRect().top < chrome) timelineEl.scrollIntoView();
+		});
+	}
+
 	onMount(() => {
-		const cleanups: (() => void)[] = [];
-		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 		// Scoped to this page for its lifetime -- never leaks to / or /sponsors.
-		if (!prefersReducedMotion) {
-			document.documentElement.style.scrollBehavior = 'smooth';
-			cleanups.push(() => {
-				document.documentElement.style.scrollBehavior = '';
-			});
-		}
-
-		// One observer rather than three, so all sections arrive in a single
-		// batched callback and lastIndexOf sees a consistent snapshot. Percentage
-		// rootMargin means it never needs recreating on resize. The band sits
-		// between 28% and 42% down the viewport, always below the sticky chrome.
-		const seen = team.seasons.map(() => false);
-		const spy = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-					const i = sectionEls.indexOf(entry.target as HTMLElement);
-					if (i !== -1) seen[i] = entry.isIntersecting;
-				}
-				// Seasons run newest-first top to bottom, so the last intersecting
-				// one is what most recently crossed the reader line.
-				const next = seen.lastIndexOf(true);
-				// -1 means nothing is in the band (page top, or scrolled past the
-				// last season into the footer) -- hold rather than snapping to 0.
-				if (next !== -1) activeIndex = next;
-			},
-			{ rootMargin: '-28% 0px -58% 0px', threshold: 0 }
-		);
-		for (const el of sectionEls) if (el) spy.observe(el);
-		cleanups.push(() => spy.disconnect());
-
-		if (!prefersReducedMotion) {
-			cleanups.push(
-				scroll(animate(railFillEl, { scaleY: [0, 1] }, { ease: 'linear', duration: 1 }), {
-					target: timelineEl,
-					offset: ['start 28%', 'end 72%']
-				})
-			);
-		}
-
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		document.documentElement.style.scrollBehavior = 'smooth';
 		return () => {
-			for (const cleanup of cleanups) cleanup();
+			document.documentElement.style.scrollBehavior = '';
 		};
+	});
+
+	// Rebound whenever the season changes, since swapping panels changes the
+	// timeline's height and with it the scroll range the fill maps onto.
+	$effect(() => {
+		activeIndex;
+		if (!railFillEl || !timelineEl) return;
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		return scroll(animate(railFillEl, { scaleY: [0, 1] }, { ease: 'linear', duration: 1 }), {
+			target: timelineEl,
+			offset: ['start 28%', 'end 72%']
+		});
 	});
 </script>
 
@@ -72,90 +60,126 @@
 </svelte:head>
 
 <main class="page-main">
-	<section class="history-intro panel">
-		<div>
+	<section class="history-intro">
+		<div class="history-head">
 			<div class="eyebrow">History</div>
 			<h1 class="heading-display history-title">{team.historyTitle}</h1>
 		</div>
-		<div>
+
+		<div class="history-aside">
 			<p class="body-copy history-lede">{team.historyIntro}</p>
-			<div class="history-stats">
-				<span class="history-stat">{team.seasons.length} seasons</span>
-				<span class="history-stat">{entryCount} log entries</span>
-				<span class="history-stat">Newest first</span>
-			</div>
+			<dl class="history-stats">
+				<div class="history-stat">
+					<dt class="history-stat-label">Seasons</dt>
+					<dd class="history-stat-value">{team.seasons.length}</dd>
+				</div>
+				<div class="history-stat">
+					<dt class="history-stat-label">Log entries</dt>
+					<dd class="history-stat-value">{entryCount}</dd>
+				</div>
+			</dl>
 		</div>
 	</section>
 
-	<SeasonScrubber seasons={team.seasons} {activeIndex} />
+	<SeasonScrubber seasons={team.seasons} {activeIndex} onselect={selectSeason} />
 
 	<div bind:this={timelineEl} class="history-timeline">
 		<div class="tl-rail" aria-hidden="true">
 			<div bind:this={railFillEl} class="tl-rail-fill"></div>
 		</div>
 
-		{#each team.seasons as season, i (season.id)}
-			<TimelineSeason {season} isPassed={i <= activeIndex} bind:element={sectionEls[i]} />
-		{/each}
-
-		<div class="tl-cap">
-			<span class="tl-marker tl-marker--cap" aria-hidden="true"></span>
-			<span class="tl-cap-label">{team.eyebrow}</span>
-		</div>
+		{#key activeIndex}
+			<TimelineSeason season={team.seasons[activeIndex]} />
+		{/key}
 	</div>
 </main>
 
 <style>
+	/* Hoisted so the intro, the sticky season tabs and the timeline all share one
+	   left edge, with the rail alone sitting out at half the gutter. */
+	.page-main {
+		--tl-gutter: clamp(30px, 5.5vw, 60px);
+	}
+
+	/* Masthead: title flush to the timeline's left edge, supporting text flush to
+	   the page's right edge, so the block reads as deliberate on a full-bleed
+	   page instead of trailing off into dead space mid-row. */
 	.history-intro {
-		padding: 52px;
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 28px 52px;
-		align-items: end;
+		padding: 26px 0 38px var(--tl-gutter);
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: 30px 64px;
+	}
+
+	.history-head {
+		flex: 1 1 380px;
+		min-width: 0;
 	}
 
 	.history-title {
 		font-size: clamp(26px, 3.4vw, 46px);
-		line-height: 1.15;
+		line-height: 1.12;
 		letter-spacing: -0.015em;
-		margin: 24px 0 0;
+		margin: 20px 0 0;
+	}
+
+	.history-aside {
+		flex: 0 1 clamp(280px, 32vw, 440px);
 	}
 
 	.history-lede {
-		max-width: 48ch;
+		font-size: 14.5px;
+		line-height: 1.7;
+		max-width: 46ch;
 	}
 
+	/* Spec strip -- value over label, hairline between, reading as instrument
+	   readout rather than a run of small grey text. */
 	.history-stats {
 		display: flex;
 		flex-wrap: wrap;
-		align-items: center;
-		gap: 10px 18px;
-		margin-top: 22px;
+		margin: 26px 0 0;
 	}
 
 	.history-stat {
-		font-size: 10.5px;
+		padding: 0 26px;
+	}
+
+	.history-stat:first-child {
+		padding-left: 0;
+	}
+
+	.history-stat + .history-stat {
+		border-left: 1px solid var(--outline);
+	}
+
+	.history-stat-label {
+		margin: 0;
+		font-size: 10px;
 		font-weight: var(--weight-regular);
-		letter-spacing: 0.1em;
+		letter-spacing: 0.14em;
 		text-transform: uppercase;
 		color: var(--on-var);
 	}
 
-	.history-stat + .history-stat::before {
-		content: '·';
-		margin-right: 18px;
-		color: var(--outline);
+	.history-stat-value {
+		margin: 7px 0 0;
+		font-family: var(--font-display);
+		font-size: 24px;
+		font-weight: var(--weight-thin);
+		line-height: 1;
+		letter-spacing: -0.01em;
+		color: var(--on-surface);
 	}
 
-	/* One gutter value drives the rail position, every marker offset and the
-	   entry connectors, so they cannot drift apart across breakpoints. */
 	.history-timeline {
-		--tl-gutter: clamp(30px, 5.5vw, 60px);
 		position: relative;
 		padding-left: var(--tl-gutter);
-		display: flex;
-		flex-direction: column;
-		gap: clamp(48px, 6vw, 76px);
+		padding-top: 8px;
+		/* Keeps a season change clear of the sticky header + season tabs. */
+		scroll-margin-top: calc(var(--site-header-h, 124px) + var(--scrub-h, 66px) + 18px);
 	}
 
 	.tl-rail {
@@ -190,30 +214,5 @@
 		background: var(--primary);
 		transform: scaleY(0);
 		transform-origin: top center;
-	}
-
-	.tl-cap {
-		position: relative;
-		padding-bottom: 8px;
-	}
-
-	.tl-cap-label {
-		font-size: 10.5px;
-		font-weight: var(--weight-regular);
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--on-var);
-	}
-
-	.tl-marker--cap {
-		position: absolute;
-		left: calc(var(--tl-gutter) / -2);
-		transform: translateX(-50%);
-		top: 3px;
-		width: 9px;
-		height: 9px;
-		border-radius: var(--radius-full);
-		background: var(--surface);
-		border: 1px solid var(--outline);
 	}
 </style>
