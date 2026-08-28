@@ -43,6 +43,7 @@ export const team: TeamData = {
 	historyIntro: 'From our engineering portfolios. Dates are league meets. Results are what the event recorded.',
 	seasons: [
 		{
+			id: 'season-2025-26',
 			years: '2025–26',
 			tag: 'Current',
 			game: 'DECODE',
@@ -75,6 +76,7 @@ export const team: TeamData = {
 			fig: 'Current robot'
 		},
 		{
+			id: 'season-2024-25',
 			years: '2024–25',
 			tag: 'Second season',
 			game: 'INTO THE DEEP',
@@ -102,6 +104,7 @@ export const team: TeamData = {
 			fig: 'Pivot and linear slides'
 		},
 		{
+			id: 'season-2023-24',
 			years: '2023–24',
 			tag: 'Rookie season',
 			game: 'CENTERSTAGE',

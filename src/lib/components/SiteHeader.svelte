@@ -21,6 +21,21 @@
 
 	onMount(() => {
 		animate(navEl, { opacity: [0, 1], y: [-16, 0] }, { duration: 0.8, ease: EASE });
+
+		// Published so sticky elements further down the page (the history timeline's
+		// season index) can offset below this header without hardcoding its height,
+		// which differs by breakpoint and shifts again once the webfont loads.
+		const publishHeight = () =>
+			document.documentElement.style.setProperty('--site-header-h', `${navEl.offsetHeight}px`);
+		const heightObserver = new ResizeObserver(publishHeight);
+		heightObserver.observe(navEl);
+		publishHeight();
+
+		// Deliberately does not clear the property. SiteHeader mounts in both the
+		// home route and the (site) layout, and on client-side navigation the
+		// outgoing instance can tear down after the incoming one mounts -- removing
+		// it here would wipe a value that is still correct.
+		return () => heightObserver.disconnect();
 	});
 
 	function toggleMenu() {

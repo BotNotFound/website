@@ -15,6 +15,9 @@ export interface SeasonLogEntry {
 }
 
 export interface Season {
+	/** Stable URL fragment, e.g. "season-2025-26". Deliberately not derived from
+	    `years` so the anchor never depends on the en dash in the display string. */
+	id: string;
 	years: string;
 	tag: string;
 	game: string;
