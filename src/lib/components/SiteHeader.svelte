@@ -21,11 +21,14 @@
 	const isHome = $derived(path === '/');
 
 	let navEl: HTMLElement;
+	let controlsEl: HTMLDivElement;
 	let menuOpen = $state(false);
 	let menuEl: HTMLDivElement | undefined = $state();
 
 	onMount(() => {
-		animate(navEl, { opacity: [0, 1], y: [-16, 0] }, { duration: 0.8, ease: EASE });
+		// Only the controls animate in. The logo is the brand anchor and is left
+		// static -- animating the whole nav made it fade and slide on every page load.
+		animate(controlsEl, { opacity: [0, 1], y: [-16, 0] }, { duration: 0.8, ease: EASE });
 
 		// Published so sticky elements further down the page (the history timeline's
 		// season index) can offset below this header without hardcoding its height,
@@ -73,7 +76,7 @@
 		</a>
 	</div>
 
-	<div class="navbar-right">
+	<div bind:this={controlsEl} class="navbar-right">
 		<a
 			class="icon-button"
 			href="https://instagram.com/clubrhsrobotics"
