@@ -11,7 +11,11 @@
 	// The home page's 3D model finishes loading well after `load` fires, since
 	// it's fetched from JS rather than a declarative <img>/<script> tag -- wait
 	// for it too so the splash doesn't clear onto an empty hero.
-	const isHome = $derived(page.url.pathname === '/');
+	// pathname carries the base prefix on a project-site deploy ("/website/"), so
+	// strip it before comparing -- comparing the raw pathname made isHome false in
+	// production, which skipped the model gate and cleared the splash at load.
+	const path = $derived(page.url.pathname.slice(base.length) || '/');
+	const isHome = $derived(path === '/');
 	const readyToFinish = $derived(pageLoaded && (!isHome || heroModel.ready));
 
 	onMount(() => {

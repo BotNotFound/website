@@ -145,7 +145,12 @@
 
 				pivot.add(framing);
 				renderFrame();
-				heroModel.ready = true;
+				// renderFrame() only issues the draw; the frame is not on screen until
+				// the compositor runs. Waiting a frame means the splash starts fading
+				// over a robot that is genuinely painted, not one still being presented.
+				requestAnimationFrame(() => {
+					if (!disposed) heroModel.ready = true;
+				});
 			},
 			undefined,
 			(error) => {
