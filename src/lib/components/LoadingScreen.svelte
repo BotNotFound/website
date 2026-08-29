@@ -18,6 +18,12 @@
 	const isHome = $derived(path === '/');
 	const readyToFinish = $derived(pageLoaded && (!isHome || heroModel.ready));
 
+	// Only the home page has a real number to show (the 23MB model download).
+	// Everywhere else the wait is too short and too opaque to measure, so the
+	// bar sweeps instead of pretending to know a percentage.
+	const determinate = $derived(isHome && heroModel.progress > 0);
+	const percent = $derived(Math.round((fadingOut ? 1 : heroModel.progress) * 100));
+
 	onMount(() => {
 		if (document.readyState === 'complete') {
 			pageLoaded = true;
@@ -44,6 +50,13 @@
 {#if visible}
 	<div class="loading-screen" class:fading={fadingOut} aria-hidden="true">
 		<img src="{base}/spinner.png" alt="" class="loading-spinner" />
+		<div class="loading-bar">
+			{#if determinate}
+				<div class="loading-bar-fill" style:width="{percent}%"></div>
+			{:else}
+				<div class="loading-bar-sweep"></div>
+			{/if}
+		</div>
 	</div>
 {/if}
 
@@ -53,8 +66,11 @@
 		inset: 0;
 		z-index: 1000;
 		background: #000000;
-		display: grid;
-		place-items: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 26px;
 		opacity: 1;
 		transition: opacity 0.4s ease;
 	}
@@ -68,6 +84,42 @@
 		width: 64px;
 		height: 64px;
 		animation: loading-spin 1s linear infinite;
+	}
+
+	.loading-bar {
+		position: relative;
+		width: min(180px, 44vw);
+		height: 2px;
+		background: var(--outline);
+		border-radius: var(--radius-full);
+		overflow: hidden;
+	}
+
+	.loading-bar-fill {
+		height: 100%;
+		background: var(--primary);
+		border-radius: inherit;
+		/* Eases toward each reported figure so the bar reads as motion rather
+		   than a series of jumps between progress events. */
+		transition: width 0.25s ease-out;
+	}
+
+	.loading-bar-sweep {
+		position: absolute;
+		inset: 0 auto 0 0;
+		width: 40%;
+		background: var(--primary);
+		border-radius: inherit;
+		animation: loading-sweep 1.1s ease-in-out infinite;
+	}
+
+	@keyframes loading-sweep {
+		from {
+			transform: translateX(-100%);
+		}
+		to {
+			transform: translateX(250%);
+		}
 	}
 
 	@keyframes loading-spin {

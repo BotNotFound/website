@@ -148,13 +148,22 @@
 				// renderFrame() only issues the draw; the frame is not on screen until
 				// the compositor runs. Waiting a frame means the splash starts fading
 				// over a robot that is genuinely painted, not one still being presented.
+				heroModel.progress = 1;
 				requestAnimationFrame(() => {
 					if (!disposed) heroModel.ready = true;
 				});
 			},
-			undefined,
+			(event) => {
+				// Guarded: without a Content-Length the total is 0 and the ratio would
+				// be NaN. Capped at 0.9 because Draco decode still follows the
+				// download -- a bar that sat full for seconds would read as stuck.
+				if (event.lengthComputable && event.total > 0) {
+					heroModel.progress = Math.min(0.9, (event.loaded / event.total) * 0.9);
+				}
+			},
 			(error) => {
 				console.error('Failed to load robot model:', error);
+				heroModel.progress = 1;
 				// Let the loading screen clear anyway -- a stuck spinner over a
 				// broken model is worse than showing the empty hero.
 				heroModel.ready = true;
