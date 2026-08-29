@@ -18,10 +18,7 @@
 		<div class="footer-copyright">© 2026 {team.name}</div>
 	</div>
 
-	<div class="footer-fine-print">
-		Wednesdays, 2:00–3:30 · Room E220 · Redmond High School, Redmond WA · FIRST® Tech Challenge ·
-		Not affiliated with FIRST®
-	</div>
+	<div class="footer-fine-print">FIRST® Tech Challenge · Not affiliated with FIRST®</div>
 </footer>
 
 <style>
