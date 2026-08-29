@@ -6,6 +6,9 @@ export const team: TeamData = {
 	eyebrow: 'Founded 2023 · FIRST Tech Challenge',
 	heroLine: "Redmond High's first",
 	heroEm: 'robotics team.',
+	aboutTitle: 'Redmond High had no robotics club. Now it has two.',
+	aboutIntro:
+		'Who runs the team, what we are trying to do, and how we build. The mission and the method are quoted from our engineering portfolios.',
 	intro:
 		'Redmond High had no robotics club before 2023. Students had tried to start one around 25 times in the previous decade. The school has no shop and no STEM teacher free to advise a team, so we asked an English teacher and met off campus. Nine of us started it. Nine of us still run it, with a second team next to us now.',
 	specs: [

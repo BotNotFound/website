@@ -6,13 +6,14 @@
 
 	const EASE = [0.16, 1, 0.3, 1] as const;
 
+	// Shown in full on every page, in this order, so the menu never reshuffles as
+	// you move around. Home is not listed -- the logo already links there.
 	const allPages = [
-		{ href: '/', label: 'Home' },
+		{ href: '/about', label: 'About' },
 		{ href: '/history', label: 'History' },
 		{ href: '/sponsors', label: 'Sponsors' }
 	];
 
-	const otherPages = $derived(allPages.filter((item) => item.href !== page.url.pathname));
 	const isHome = $derived(page.url.pathname === '/');
 
 	let navEl: HTMLElement;
@@ -125,8 +126,13 @@
 
 			{#if menuOpen}
 				<div class="page-popup" role="menu">
-					{#each otherPages as item (item.href)}
-						<a href={item.href} role="menuitem" onclick={() => (menuOpen = false)}>{item.label}</a>
+					{#each allPages as item (item.href)}
+						<a
+							href={item.href}
+							role="menuitem"
+							aria-current={page.url.pathname === item.href ? 'page' : undefined}
+							onclick={() => (menuOpen = false)}>{item.label}</a
+						>
 					{/each}
 				</div>
 			{/if}
@@ -247,5 +253,11 @@
 
 	.page-popup a:hover {
 		background: rgba(255, 255, 255, 0.08);
+	}
+
+	/* The menu now lists every page including the current one, so the current one
+	   needs to say so -- otherwise it looks like a link that does nothing. */
+	.page-popup a[aria-current='page'] {
+		color: var(--primary);
 	}
 </style>

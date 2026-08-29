@@ -53,6 +53,8 @@ export interface TeamData {
 	eyebrow: string;
 	heroLine: string;
 	heroEm: string;
+	aboutTitle: string;
+	aboutIntro: string;
 	intro: string;
 	specs: Spec[];
 	photoSlot: string;

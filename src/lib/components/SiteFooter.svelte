@@ -8,6 +8,7 @@
 
 		<nav class="footer-links">
 			<a href="/">home</a>
+			<a href="/about">about</a>
 			<a href="/history">history</a>
 			<a href="/sponsors">sponsors</a>
 			<a href="mailto:rhs_robotics@outlook.com">email</a>
