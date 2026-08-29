@@ -1,23 +1,30 @@
 <script lang="ts">
-	import HeroSection from '$lib/components/HeroSection.svelte';
-	import SpecGrid from '$lib/components/SpecGrid.svelte';
-	import PhotoPlaceholder from '$lib/components/PhotoPlaceholder.svelte';
-	import MissionSection from '$lib/components/MissionSection.svelte';
-	import PillarGrid from '$lib/components/PillarGrid.svelte';
-	import { teams } from '$lib/data/teams';
-	import { teamSelection } from '$lib/state/team.svelte';
-
-	const team = $derived(teams[teamSelection.current]);
+	import SiteHeader from '$lib/components/SiteHeader.svelte';
+	import HeroMedia from '$lib/components/hero/HeroMedia.svelte';
+	import HeroFooter from '$lib/components/hero/HeroFooter.svelte';
+	import { team } from '$lib/data/teams';
 </script>
 
 <svelte:head>
 	<title>{team.name} · FTC {team.number}</title>
 </svelte:head>
 
-<main class="page-main">
-	<HeroSection {team} />
-	<SpecGrid specs={team.specs} />
-	<PhotoPlaceholder label={team.photoSlot} caption={team.photoCaption} />
-	<MissionSection {team} />
-	<PillarGrid pillars={team.pillars} />
-</main>
+<div class="hero-page">
+	<SiteHeader />
+	<HeroMedia />
+	<HeroFooter />
+</div>
+
+<style>
+	.hero-page {
+		position: relative;
+		min-height: 100vh;
+		background: #000000;
+		color: #ffffff;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		overflow: clip;
+		font-family: var(--font-body);
+	}
+</style>

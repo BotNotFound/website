@@ -1,106 +1,86 @@
 <script lang="ts">
-	import { teams, siblingOf } from '$lib/data/teams';
-	import { teamSelection } from '$lib/state/team.svelte';
-
-	const team = $derived(teams[teamSelection.current]);
-	const sibling = $derived(teams[siblingOf(teamSelection.current)]);
+	import { team } from '$lib/data/teams';
 </script>
 
-<footer class="footer-shell">
-	<div class="footer panel">
-		<div>
-			<div class="footer-team-name heading-display">{team.name}</div>
-			<div class="footer-team-meta">
-				FTC {team.number}<br />Redmond High School, Redmond WA
-			</div>
-		</div>
+<footer class="site-footer">
+	<div class="footer-bar">
+		<a href="/" class="team-name-link">{team.name}</a>
 
-		<div>
-			<div class="footer-label">Join the club</div>
-			<div class="footer-team-meta footer-contact">
-				Wednesdays, 2:00–3:30 · Room E220<br />
-				<a href="mailto:rhs_robotics@outlook.com">rhs_robotics@outlook.com</a><br />
-				<a href="https://instagram.com/clubrhsrobotics">@clubrhsrobotics</a>
-			</div>
-		</div>
+		<nav class="footer-links">
+			<a href="/">home</a>
+			<a href="/about">about</a>
+			<a href="/history">history</a>
+			<a href="/sponsors">sponsors</a>
+			<a href="mailto:rhs_robotics@outlook.com">email</a>
+			<a href="https://instagram.com/clubrhsrobotics" target="_blank" rel="noopener">instagram</a>
+		</nav>
 
-		<div>
-			<div class="footer-label">Sister team</div>
-			<button type="button" class="sibling-button" onclick={() => teamSelection.select(sibling.key)}>
-				{sibling.name} · {sibling.number}
-			</button>
-		</div>
-
-		<div class="footer-legal">
-			<div>FIRST® Tech Challenge</div>
-			<div>Not affiliated with FIRST®</div>
-			<div>© 2026</div>
-		</div>
+		<div class="footer-copyright">© 2026 {team.name}</div>
 	</div>
+
+	<div class="footer-fine-print">FIRST® Tech Challenge · Not affiliated with FIRST®</div>
 </footer>
 
 <style>
-	.footer-shell {
+	.site-footer {
+		margin-top: 40px;
+		border-top: 1px solid var(--outline);
+	}
+
+	.footer-bar {
 		max-width: var(--page-max);
-		margin: 20px auto 0;
-		padding: 0 20px 20px;
-	}
-
-	.footer {
-		background: var(--sc-high);
-		padding: 44px 48px;
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-		gap: 32px 48px;
-		align-items: start;
-	}
-
-	.footer-team-name {
-		font-size: 20px;
-		line-height: 1.3;
-		margin-bottom: 14px;
-	}
-
-	.footer-team-meta {
-		font-size: 13.5px;
-		color: var(--on-var);
-		line-height: 1.75;
-	}
-
-	.footer-contact {
-		line-height: 1.9;
-	}
-
-	.footer-label {
-		font-size: 11px;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--primary);
-		margin-bottom: 12px;
-	}
-
-	.sibling-button {
-		display: inline-flex;
+		margin: 0 auto;
+		padding: 22px 20px;
+		display: flex;
 		align-items: center;
-		background: var(--sc-low);
-		border: 1px solid var(--outline);
-		border-radius: 999px;
-		padding: 12px 22px;
+		justify-content: space-between;
+		gap: 24px;
+		flex-wrap: wrap;
+	}
+
+	.team-name-link {
 		font-size: 13.5px;
-		font-weight: 600;
+		font-weight: var(--weight-regular);
 		color: var(--on-surface);
-		cursor: pointer;
 	}
 
-	.sibling-button:hover {
-		background: var(--sc-highest);
+	.team-name-link:hover {
+		color: var(--primary);
 	}
 
-	.footer-legal {
-		font-size: 11px;
-		letter-spacing: 0.09em;
-		text-transform: uppercase;
+	.footer-links {
+		display: flex;
+		align-items: center;
+		gap: 28px;
+		flex-wrap: wrap;
+	}
+
+	.footer-links a {
+		font-size: 13px;
+		font-weight: var(--weight-light);
+		text-transform: lowercase;
 		color: var(--on-var);
-		line-height: 2;
+	}
+
+	.footer-links a:hover {
+		color: var(--on-surface);
+	}
+
+	.footer-copyright {
+		font-size: 12.5px;
+		font-weight: var(--weight-light);
+		color: var(--on-var);
+		white-space: nowrap;
+	}
+
+	.footer-fine-print {
+		max-width: var(--page-max);
+		margin: 0 auto;
+		padding: 0 20px 22px;
+		font-size: 11px;
+		font-weight: var(--weight-light);
+		letter-spacing: 0.02em;
+		color: var(--on-var);
+		opacity: 0.7;
 	}
 </style>

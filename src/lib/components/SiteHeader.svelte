@@ -1,201 +1,263 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { animate } from 'motion';
 	import { page } from '$app/state';
-	import { teams } from '$lib/data/teams';
-	import { teamSelection } from '$lib/state/team.svelte';
-	import type { TeamKey } from '$lib/types';
+	import { team } from '$lib/data/teams';
 
-	const team = $derived(teams[teamSelection.current]);
+	const EASE = [0.16, 1, 0.3, 1] as const;
 
-	const navItems = [
-		{ label: 'Home', href: '/' },
-		{ label: 'History', href: '/history' },
-		{ label: 'Sponsors', href: '/sponsors' }
+	// Shown in full on every page, in this order, so the menu never reshuffles as
+	// you move around. Home is not listed -- the logo already links there.
+	const allPages = [
+		{ href: '/about', label: 'About' },
+		{ href: '/history', label: 'History' },
+		{ href: '/sponsors', label: 'Sponsors' }
 	];
 
-	function isActive(href: string) {
-		return href === '/' ? page.url.pathname === '/' : page.url.pathname.startsWith(href);
+	const isHome = $derived(page.url.pathname === '/');
+
+	let navEl: HTMLElement;
+	let menuOpen = $state(false);
+	let menuEl: HTMLDivElement | undefined = $state();
+
+	onMount(() => {
+		animate(navEl, { opacity: [0, 1], y: [-16, 0] }, { duration: 0.8, ease: EASE });
+
+		// Published so sticky elements further down the page (the history timeline's
+		// season index) can offset below this header without hardcoding its height,
+		// which differs by breakpoint and shifts again once the webfont loads.
+		const publishHeight = () =>
+			document.documentElement.style.setProperty('--site-header-h', `${navEl.offsetHeight}px`);
+		const heightObserver = new ResizeObserver(publishHeight);
+		heightObserver.observe(navEl);
+		publishHeight();
+
+		// Deliberately does not clear the property. SiteHeader mounts in both the
+		// home route and the (site) layout, and on client-side navigation the
+		// outgoing instance can tear down after the incoming one mounts -- removing
+		// it here would wipe a value that is still correct.
+		return () => heightObserver.disconnect();
+	});
+
+	function toggleMenu() {
+		menuOpen = !menuOpen;
 	}
 
-	function selectTeam(key: TeamKey) {
-		teamSelection.select(key);
-	}
+	$effect(() => {
+		if (!menuOpen) return;
+
+		function handlePointerDown(event: PointerEvent) {
+			if (menuEl && !menuEl.contains(event.target as Node)) menuOpen = false;
+		}
+		function handleKeydown(event: KeyboardEvent) {
+			if (event.key === 'Escape') menuOpen = false;
+		}
+
+		window.addEventListener('pointerdown', handlePointerDown);
+		window.addEventListener('keydown', handleKeydown);
+		return () => {
+			window.removeEventListener('pointerdown', handlePointerDown);
+			window.removeEventListener('keydown', handleKeydown);
+		};
+	});
 </script>
 
-<div class="header-shell">
-	<div class="header-bar panel">
+<nav bind:this={navEl} class="site-navbar" class:transparent={isHome}>
+	<div class="navbar-left">
 		<a class="brand" href="/">
-			<span class="brand-mark">?</span>
-			<span class="brand-text">
-				<span class="brand-name heading-display">{team.name}</span>
-				<span class="brand-meta">FTC {team.number} · Redmond WA</span>
-			</span>
+			<img class="logo" src="/logo.png" alt="{team.name}, FTC {team.number}, Redmond WA" />
+		</a>
+	</div>
+
+	<div class="navbar-right">
+		<a
+			class="icon-button"
+			href="https://instagram.com/clubrhsrobotics"
+			target="_blank"
+			rel="noopener"
+			aria-label="Bot Not Found on Instagram"
+		>
+			<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+				<rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6" />
+				<circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6" />
+				<circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" />
+			</svg>
 		</a>
 
-		<div class="header-controls">
-			<nav class="nav-pill">
-				{#each navItems as item (item.href)}
-					<a href={item.href} class="nav-link" class:active={isActive(item.href)}>{item.label}</a>
-				{/each}
-			</nav>
+		<div class="page-menu" bind:this={menuEl}>
+			<button
+				type="button"
+				class="icon-button"
+				aria-haspopup="menu"
+				aria-expanded={menuOpen}
+				aria-label="Site pages"
+				onclick={toggleMenu}
+			>
+				<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+					<line
+						x1="4"
+						y1="7"
+						x2="20"
+						y2="7"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+					/>
+					<line
+						x1="4"
+						y1="12"
+						x2="20"
+						y2="12"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+					/>
+					<line
+						x1="4"
+						y1="17"
+						x2="20"
+						y2="17"
+						stroke="currentColor"
+						stroke-width="1.8"
+						stroke-linecap="round"
+					/>
+				</svg>
+			</button>
 
-			<div class="team-pill">
-				{#each Object.values(teams) as t (t.key)}
-					<button
-						type="button"
-						class="team-tab"
-						class:active={teamSelection.current === t.key}
-						onclick={() => selectTeam(t.key)}
-					>
-						<span class="team-tab-name">{t.name}</span>
-						<span class="team-tab-number">{t.number}</span>
-					</button>
-				{/each}
-			</div>
+			{#if menuOpen}
+				<div class="page-popup" role="menu">
+					{#each allPages as item (item.href)}
+						<a
+							href={item.href}
+							role="menuitem"
+							aria-current={page.url.pathname === item.href ? 'page' : undefined}
+							onclick={() => (menuOpen = false)}>{item.label}</a
+						>
+					{/each}
+				</div>
+			{/if}
 		</div>
 	</div>
-</div>
+</nav>
 
 <style>
-	.header-shell {
+	.site-navbar {
 		position: sticky;
 		top: 0;
-		z-index: 30;
-		padding: 16px 20px 10px;
-		background: linear-gradient(to bottom, var(--surface) 62%, transparent);
-	}
-
-	.header-bar {
-		max-width: var(--page-max);
-		margin: 0 auto;
-		background: var(--sc-high);
-		padding: 12px 16px 12px 20px;
+		z-index: 50;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 20px;
-		flex-wrap: wrap;
+		gap: 14px;
+		padding: 16px;
+		background: #000000;
+	}
+
+	.site-navbar.transparent {
+		background: transparent;
+	}
+
+	@media (min-width: 768px) {
+		.site-navbar {
+			padding: 24px 32px;
+		}
+	}
+
+	.navbar-left,
+	.navbar-right {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	@media (min-width: 768px) {
+		.navbar-left,
+		.navbar-right {
+			gap: 14px;
+		}
 	}
 
 	.brand {
 		display: flex;
 		align-items: center;
-		gap: 18px;
-		min-width: 0;
 	}
 
-	.brand-mark {
-		width: 56px;
-		height: 56px;
-		border-radius: 999px;
-		background: var(--primary);
+	.logo {
+		height: 60px;
+		width: auto;
+		flex: none;
+		object-fit: contain;
+	}
+
+	@media (min-width: 768px) {
+		.logo {
+			height: 76px;
+		}
+	}
+
+	.page-menu {
+		position: relative;
+	}
+
+	.icon-button {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		background: #1c1c1e;
+		border: none;
 		display: grid;
 		place-items: center;
-		flex: none;
-		font-family: var(--font-display);
-		font-size: 30px;
-		font-weight: 700;
-		color: var(--on-primary);
-		line-height: 1;
-	}
-
-	.brand-text {
-		display: flex;
-		flex-direction: column;
-		gap: 5px;
-		min-width: 0;
-	}
-
-	.brand-name {
-		font-size: clamp(20px, 2.2vw, 30px);
-		line-height: 1.05;
-		white-space: nowrap;
-	}
-
-	.brand-meta {
-		font-size: 11.5px;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--on-var);
-	}
-
-	.header-controls {
-		display: flex;
-		align-items: center;
-		gap: 18px;
-		flex-wrap: wrap;
-	}
-
-	.nav-pill,
-	.team-pill {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		background: var(--sc-low);
-		border-radius: 999px;
-		padding: 5px;
-	}
-
-	.team-pill {
-		align-items: stretch;
-	}
-
-	.nav-link {
-		font-size: 13.5px;
-		font-weight: 500;
-		padding: 10px 20px;
-		border-radius: 999px;
-		background: transparent;
-		color: var(--on-var);
+		color: #fff;
+		cursor: pointer;
 		transition: background 0.2s ease;
 	}
 
-	.nav-link:hover {
-		background: var(--sc-highest);
-		color: var(--on-surface);
+	@media (min-width: 768px) {
+		.icon-button {
+			width: 40px;
+			height: 40px;
+		}
 	}
 
-	.nav-link.active {
-		background: var(--p-container);
-		color: var(--on-p-container);
+	.icon-button:hover,
+	.icon-button[aria-expanded='true'] {
+		background: #2c2c2e;
 	}
 
-	.nav-link.active:hover {
-		background: var(--p-container);
-		color: var(--on-p-container);
+	.icon-button svg {
+		width: 16px;
+		height: 16px;
 	}
 
-	.team-tab {
+	.page-popup {
+		position: absolute;
+		top: calc(100% + 10px);
+		right: 0;
+		min-width: 160px;
 		display: flex;
 		flex-direction: column;
-		align-items: flex-start;
-		justify-content: center;
-		gap: 3px;
-		padding: 9px 18px;
-		border: none;
-		border-radius: 999px;
-		cursor: pointer;
-		text-align: left;
-		background: transparent;
-		color: var(--on-var);
-		transition: all 0.22s cubic-bezier(0.2, 0, 0, 1);
+		gap: 2px;
+		background: #1c1c1e;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		border-radius: 16px;
+		padding: 8px;
+		box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
 	}
 
-	.team-tab.active {
-		background: var(--primary);
-		color: var(--on-primary);
+	.page-popup a {
+		padding: 10px 12px;
+		border-radius: 10px;
+		font-size: 13px;
+		color: #fff;
 	}
 
-	.team-tab-name {
-		font-family: var(--font-display);
-		font-size: 12px;
-		font-weight: 700;
-		line-height: 1.2;
-		text-transform: uppercase;
+	.page-popup a:hover {
+		background: rgba(255, 255, 255, 0.08);
 	}
 
-	.team-tab-number {
-		font-size: 10px;
-		letter-spacing: 0.09em;
-		opacity: 0.75;
+	/* The menu now lists every page including the current one, so the current one
+	   needs to say so -- otherwise it looks like a link that does nothing. */
+	.page-popup a[aria-current='page'] {
+		color: var(--primary);
 	}
 </style>
