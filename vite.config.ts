@@ -24,6 +24,10 @@ export default defineConfig({
 			adapter: adapter({
 				pages: 'build',
 				assets: 'build',
+				// GitHub Pages serves 404.html for any path it cannot resolve, which is
+				// how the custom error page gets shown. Without this nothing emits one
+				// and unknown URLs fall through to GitHub's own default 404.
+				fallback: '404.html',
 				precompress: false,
 				strict: true
 			})
