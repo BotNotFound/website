@@ -1,12 +1,13 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 	import * as THREE from 'three';
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 	import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 	import { heroModel } from '$lib/state/heroModel.svelte';
 
-	const MODEL_URL = '/robots/robot.glb';
-	const DRACO_DECODER_PATH = '/draco/';
+	const MODEL_URL = `${base}/robots/robot.glb`;
+	const DRACO_DECODER_PATH = `${base}/draco/`;
 
 	// How far the model tilts toward the cursor, in radians -- kept tiny so
 	// it barely moves, just enough to feel alive.

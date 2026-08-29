@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { animate } from 'motion';
 	import { team } from '$lib/data/teams';
@@ -46,8 +47,8 @@
 			</h1>
 
 			<div bind:this={buttonsEl} class="hero-buttons">
-				<a href="/history" class="hero-btn-primary">History</a>
-				<a href="/sponsors" class="hero-btn-secondary">Sponsors</a>
+				<a href="{base}/history" class="hero-btn-primary">History</a>
+				<a href="{base}/sponsors" class="hero-btn-secondary">Sponsors</a>
 			</div>
 		</div>
 

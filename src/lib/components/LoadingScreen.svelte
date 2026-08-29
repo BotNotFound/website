@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { heroModel } from '$lib/state/heroModel.svelte';
@@ -38,7 +39,7 @@
 
 {#if visible}
 	<div class="loading-screen" class:fading={fadingOut} aria-hidden="true">
-		<img src="/spinner.png" alt="" class="loading-spinner" />
+		<img src="{base}/spinner.png" alt="" class="loading-spinner" />
 	</div>
 {/if}
 

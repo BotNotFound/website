@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { animate } from 'motion';
 	import { page } from '$app/state';
+	import { base } from '$app/paths';
 	import { team } from '$lib/data/teams';
 
 	const EASE = [0.16, 1, 0.3, 1] as const;
@@ -14,7 +15,10 @@
 		{ href: '/sponsors', label: 'Sponsors' }
 	];
 
-	const isHome = $derived(page.url.pathname === '/');
+	// pathname carries the base prefix on a project-site deploy, so strip it before
+	// comparing against the route paths above -- otherwise nothing ever matches.
+	const path = $derived(page.url.pathname.slice(base.length) || '/');
+	const isHome = $derived(path === '/');
 
 	let navEl: HTMLElement;
 	let menuOpen = $state(false);
@@ -64,8 +68,8 @@
 
 <nav bind:this={navEl} class="site-navbar" class:transparent={isHome}>
 	<div class="navbar-left">
-		<a class="brand" href="/">
-			<img class="logo" src="/logo.png" alt="{team.name}, FTC {team.number}, Redmond WA" />
+		<a class="brand" href="{base}/">
+			<img class="logo" src="{base}/logo.png" alt="{team.name}, FTC {team.number}, Redmond WA" />
 		</a>
 	</div>
 
@@ -128,9 +132,9 @@
 				<div class="page-popup" role="menu">
 					{#each allPages as item (item.href)}
 						<a
-							href={item.href}
+							href="{base}{item.href}"
 							role="menuitem"
-							aria-current={page.url.pathname === item.href ? 'page' : undefined}
+							aria-current={path === item.href ? 'page' : undefined}
 							onclick={() => (menuOpen = false)}>{item.label}</a
 						>
 					{/each}

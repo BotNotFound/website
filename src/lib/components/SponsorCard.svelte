@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { revealOnView } from '$lib/actions/reveal';
 	import type { Sponsor } from '$lib/types';
 
@@ -12,7 +13,7 @@
 				class="sponsor-logo"
 				role="img"
 				aria-label={sponsor.name}
-				style:background-image={`url('${sponsor.logo}')`}
+				style:background-image={`url('${base}${sponsor.logo}')`}
 			></div>
 		{:else}
 			<!-- aria-hidden: .sponsor-name repeats this immediately below. -->

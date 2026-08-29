@@ -1,16 +1,17 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { team } from '$lib/data/teams';
 </script>
 
 <footer class="site-footer">
 	<div class="footer-bar">
-		<a href="/" class="team-name-link">{team.name}</a>
+		<a href="{base}/" class="team-name-link">{team.name}</a>
 
 		<nav class="footer-links">
-			<a href="/">home</a>
-			<a href="/about">about</a>
-			<a href="/history">history</a>
-			<a href="/sponsors">sponsors</a>
+			<a href="{base}/">home</a>
+			<a href="{base}/about">about</a>
+			<a href="{base}/history">history</a>
+			<a href="{base}/sponsors">sponsors</a>
 			<a href="mailto:rhs_robotics@outlook.com">email</a>
 			<a href="https://instagram.com/clubrhsrobotics" target="_blank" rel="noopener">instagram</a>
 		</nav>
