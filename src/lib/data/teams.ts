@@ -140,6 +140,12 @@ export const team: TeamData = {
 		'Grants, corporate sponsorship, and employee benefit matching pay for this team. Your name rides on the robot to every event, and goes on the pit banner, the jerseys, and this page.',
 	sponsors: [
 		{
+			logo: '/sponsors/boeing.png',
+			name: 'Boeing',
+			note: 'Team grant for FIRST Tech Challenge teams with a Boeing employee mentor.',
+			url: 'https://www.boeing.com'
+		},
+		{
 			logo: '/sponsors/genehaasfoundation.png',
 			name: 'Gene Haas Foundation',
 			note: 'Grant funding for manufacturing education.',
