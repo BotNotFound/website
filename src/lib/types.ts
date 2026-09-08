@@ -29,7 +29,6 @@ export interface Season {
 
 export interface Sponsor {
 	name: string;
-	note: string;
 	url: string;
 	/**
 	 * Path under /sponsors, e.g. "/sponsors/polymaker.png". Omitted when the team

@@ -140,33 +140,33 @@ export const team: TeamData = {
 		'Grants, corporate sponsorship, and employee benefit matching pay for this team. Your name rides on the robot to every event, and goes on the pit banner, the jerseys, and this page.',
 	sponsors: [
 		{
+			logo: '/sponsors/boeing.png',
+			name: 'Boeing',
+			url: 'https://www.boeing.com'
+		},
+		{
 			logo: '/sponsors/genehaasfoundation.png',
 			name: 'Gene Haas Foundation',
-			note: 'Grant funding for manufacturing education.',
 			url: 'https://www.ghaasfoundation.org'
 		},
 		{
 			logo: '/sponsors/first-washington.png',
 			name: 'FIRST Washington',
-			note: 'Grant support since our rookie season.',
 			url: 'https://firstwa.org'
 		},
 		{
 			logo: '/sponsors/polymaker.png',
 			name: 'Polymaker',
-			note: 'Filament for every 3D printed part on the robot.',
 			url: 'https://polymaker.com'
 		},
 		{
 			logo: '/sponsors/fabworks.png',
 			name: 'Fabworks',
-			note: 'Online sheet metal laser cutting and bending.',
 			url: 'https://www.fabworks.com'
 		},
 		{
 			logo: '/sponsors/sendcutsend.png',
 			name: 'SendCutSend',
-			note: 'Laser cut and CNC parts.',
 			url: 'https://sendcutsend.com'
 		}
 	],
