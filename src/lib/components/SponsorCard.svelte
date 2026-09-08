@@ -23,7 +23,6 @@
 
 	<div class="sponsor-details">
 		<div class="sponsor-name">{sponsor.name}</div>
-		<div class="sponsor-note">{sponsor.note}</div>
 	</div>
 </a>
 
@@ -88,12 +87,5 @@
 	.sponsor-name {
 		font-size: 13.5px;
 		font-weight: var(--weight-medium);
-		margin-bottom: 6px;
-	}
-
-	.sponsor-note {
-		font-size: 12px;
-		line-height: 1.55;
-		color: var(--on-var);
 	}
 </style>

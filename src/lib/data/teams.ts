@@ -142,37 +142,31 @@ export const team: TeamData = {
 		{
 			logo: '/sponsors/boeing.png',
 			name: 'Boeing',
-			note: 'Team grant for FIRST Tech Challenge teams with a Boeing employee mentor.',
 			url: 'https://www.boeing.com'
 		},
 		{
 			logo: '/sponsors/genehaasfoundation.png',
 			name: 'Gene Haas Foundation',
-			note: 'Grant funding for manufacturing education.',
 			url: 'https://www.ghaasfoundation.org'
 		},
 		{
 			logo: '/sponsors/first-washington.png',
 			name: 'FIRST Washington',
-			note: 'Grant support since our rookie season.',
 			url: 'https://firstwa.org'
 		},
 		{
 			logo: '/sponsors/polymaker.png',
 			name: 'Polymaker',
-			note: 'Filament for every 3D printed part on the robot.',
 			url: 'https://polymaker.com'
 		},
 		{
 			logo: '/sponsors/fabworks.png',
 			name: 'Fabworks',
-			note: 'Online sheet metal laser cutting and bending.',
 			url: 'https://www.fabworks.com'
 		},
 		{
 			logo: '/sponsors/sendcutsend.png',
 			name: 'SendCutSend',
-			note: 'Laser cut and CNC parts.',
 			url: 'https://sendcutsend.com'
 		}
 	],
